@@ -1,0 +1,4 @@
+# Clave de API
+__pycache__/
+secrets.py
+.vscode/
