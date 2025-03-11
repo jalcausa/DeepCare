@@ -1,6 +1,7 @@
 from secret import API_KEY
 
 from pathlib import Path
+# Hay que instalar openai y pandas
 import openai # openai v1.0.0+
 import pandas as pd
 import io
