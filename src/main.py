@@ -1,6 +1,7 @@
 from data_handler import atributos_archivos, directorio
 from api_calls import new_gemini_prompt
 from assistant import AsistenteResumenes
+import graph_generator
 
 # Obtener columnas de los CSV
 prueba_columnas = atributos_archivos(directorio)
