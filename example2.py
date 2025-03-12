@@ -1,6 +1,6 @@
 # GEMINI PRO
 
-from secret import GEMINI_KEY
+from src.secret import GEMINI_KEY
 import requests
 import json
 
