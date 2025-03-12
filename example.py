@@ -1,8 +1,9 @@
-from secret import API_KEY
+from secret import *
 
 from pathlib import Path
 # Hay que instalar openai y pandas
 import openai # openai v1.0.0+
+import google.generativeai as genai # google-generative-ai
 import pandas as pd
 import io
 import os
@@ -50,7 +51,7 @@ client = openai.OpenAI(api_key=API_KEY,base_url="https://litellm.dccp.pbu.dedalu
 # request sent to model set on litellm proxy, `litellm --model`
 
 
-def newPrompt(petition):
+def newBedrockPrompt(petition):
 	response = client.chat.completions.create(model="bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0", messages = [
 	    {
 	        "role": "user",
@@ -61,6 +62,18 @@ def newPrompt(petition):
 	# print(response)
 	return(response)
 
+def newGeminiPrompt(petition):
+	# Configurar la API Key
+	genai.configure(api_key=GEMINI_API_KEY)
+
+	# Seleccionar el modelo
+	model = genai.GenerativeModel("gemini-2.0-flash")
+
+	# Generar la respuesta
+	response = model.generate_content(petition + "Los atributos que contiene cada archivo vienen en el siguiente diccionario " + str(pruebaColumnas))
+	return(response.text)
+
 petition = input("Introduzca una pregunta:\n")
-consulta = newPrompt(petition)
-print(consulta.choices[0].message.content)
+consulta = newGeminiPrompt(petition)
+print(consulta)
+#print(consulta.choices[0].message.content)
