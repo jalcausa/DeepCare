@@ -1,0 +1,8 @@
+dotenv:
+	pip install python-dotenv
+openai:
+	pip install openai
+pandas:
+	pip install pandas
+google.generativeai:
+	pip install google.generativeai
