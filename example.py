@@ -15,7 +15,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 # Obtiene la ruta del directorio donde está el script en ejecución
 # __file__ es una variable especial que contiene la ruta absoluta del archivo que está siendo ejecutado.
 
-directorio = Path(__file__).parent.parent/"data"
+directorio = Path(__file__).parent/"data"
 
 # Si los CSV están en una carpeta dentro del repositorio, por ejemplo "data"
 # directorio_csv = directorio / "data"
