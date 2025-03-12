@@ -1,5 +1,5 @@
-from secret import *
-
+from dotenv import load_dotenv
+import os
 from pathlib import Path
 # Hay que instalar openai y pandas
 import openai # openai v1.0.0+
@@ -8,11 +8,14 @@ import pandas as pd
 import io
 import os
 
+load_dotenv(override=True)
+API_KEY = os.getenv("API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Obtiene la ruta del directorio donde está el script en ejecución
 # __file__ es una variable especial que contiene la ruta absoluta del archivo que está siendo ejecutado.
 
-directorio = Path(__file__).parent  # Si el script está en el mismo directorio que los CSV
+directorio = Path(__file__).parent.parent/"data"
 
 # Si los CSV están en una carpeta dentro del repositorio, por ejemplo "data"
 # directorio_csv = directorio / "data"
@@ -40,11 +43,11 @@ texto = str(pruebaColumnas)
 
 
 # Simulamos la lectura del archivo CSV
-with open("resumen_procedimientos.csv", "r", encoding="utf-8") as f:
-    buffer = io.StringIO(f.read())
+# with open("resumen_procedimientos.csv", "r", encoding="utf-8") as f:
+#     buffer = io.StringIO(f.read())
 
 # Cargar el CSV en un DataFrame desde el buffer
-df = pd.read_csv(buffer)
+#df = pd.read_csv(buffer)
 #print(df.to_string)
 
 client = openai.OpenAI(api_key=API_KEY,base_url="https://litellm.dccp.pbu.dedalus.com") # set proxy to base_url
