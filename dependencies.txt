@@ -8,3 +8,5 @@ google.generativeai:
 	pip install google.generativeai
 matplotlib:
 	pip install matplotlib
+seaborn:
+	pip install seaborn
