@@ -1,4 +1,4 @@
-from api_calls import new_gemini_prompt
+from gemini_api_calls import new_gemini_prompt
 
 class PromptStack:
     contador = 0

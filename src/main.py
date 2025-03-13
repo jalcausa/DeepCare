@@ -1,5 +1,5 @@
 from data_handler import atributos_archivos, directorio
-from api_calls import new_gemini_prompt
+from gemini_api_calls import new_gemini_prompt
 from promptStack import PromptStack
 from graph_generator import GraphicAgent
 
