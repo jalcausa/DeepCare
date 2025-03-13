@@ -6,15 +6,15 @@ class AgenteSelector:
         """
         Constructor del AgenteSelector.
 
-        :param api_key: La clave de API para acceder al modelo Titan.
-        :param endpoint: La URL del endpoint de Titan para hacer la consulta.
+        :param api_key: La clave de API para acceder al modelo.
+        :param endpoint: La URL del endpoint para hacer la consulta.
         """
         self.api_key = api_key
         self.endpoint = endpoint
 
     def seleccionar_agentes(self, prompt):
         """
-        Analiza el prompt utilizando el modelo Titan y decide qué agentes se deben usar.
+        Analiza el prompt utilizando el modelo y decide qué agentes se deben usar.
 
         :param prompt: El texto del prompt a analizar.
         :return: Una lista de los agentes a utilizar: ['Graph', 'Stack', 'Archivo'] o una lista vacía.

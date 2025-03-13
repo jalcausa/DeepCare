@@ -1,13 +1,14 @@
+import os
 import re
 import matplotlib.pyplot as plt
 import google.generativeai as genai
-from config import API_KEY, GEMINI_API_KEY
+from anthropic_api_calls import AnthropicClient
+from config import API_KEY
 
 
 class GraphicAgent:
     def __init__(self):
-        genai.configure(api_key=GEMINI_API_KEY)
-        self.model = genai.GenerativeModel("gemini-2.0-flash")
+        self.client = AnthropicClient()
     
     def generar_codigo_grafico(self, peticion, archivo_csv=None):
         """Genera código Python para graficar según la petición del usuario, opcionalmente usando un archivo CSV."""
@@ -23,9 +24,8 @@ class GraphicAgent:
             El archivo CSV a utilizar es: {archivo_csv}. 
             Asegúrate de incluir el código para leer este archivo y seleccionar las columnas adecuadas.
             """
-        
-        respuesta = self.model.generate_content(prompt)
-        return respuesta.text  # Extraer solo el código generado
+        respuesta = self.client.get_response(prompt)
+        return respuesta
     
 
     def limpiar_codigo(self, codigo):
@@ -41,3 +41,21 @@ class GraphicAgent:
             print("Código ejecutado exitosamente.")
         except Exception as e:
             print(f"Error al ejecutar el código: {e}")
+
+agente_grafico = GraphicAgent()
+
+# Define una petición de ejemplo
+peticion = "Genera un gráfico de barras con los datos de glucosa de los diferentes PacienteID"
+
+# Ruta absoluta al archivo CSV
+archivo_csv = os.path.join(os.path.abspath("../data"), "resumen_lab_iniciales.csv")
+
+# Generar código gráfico
+codigo_generado = agente_grafico.generar_codigo_grafico(peticion, archivo_csv)
+
+# Mostrar el código generado
+print("Código generado por el agente gráfico:")
+print(codigo_generado)
+
+# Ejecutar el código generado (esto generará el gráfico)
+agente_grafico.ejecutar_codigo(codigo_generado)

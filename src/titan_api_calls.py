@@ -1,72 +1,64 @@
-import boto3
-import json
+import openai
+import math
 from config import API_KEY
 
 class TitanClient:
     """
     Cliente para interactuar con Amazon Titan a través de Amazon Bedrock.
     """
-
     def __init__(self):
         """Inicializa el cliente de Bedrock Runtime con las credenciales de AWS."""
-        self.client = boto3.client(
-            service_name="bedrock-runtime",
-            region_name=AWS_REGION,
-            aws_access_key_id=AWS_ACCESS_KEY,
-            aws_secret_access_key=AWS_SECRET_KEY
-        )
+        self.client = openai.OpenAI(api_key=API_KEY, base_url="https://litellm.dccp.pbu.dedalus.com")
 
-    def generate_response(self, prompt, max_tokens=500, temperature=0.7, top_p=0.9):
+    def get_embedding(self, text):
         """
         Envía un prompt a Titan y devuelve la respuesta generada.
-
-        :param prompt: Texto de entrada para el modelo Titan.
-        :param max_tokens: Límite de tokens en la respuesta (por defecto 500).
-        :param temperature: Controla la aleatoriedad del modelo (0.0 = determinista, 1.0 = creativo).
-        :param top_p: Controla la diversidad de la respuesta.
-        :return: Texto generado por el modelo Titan.
+                
         """
-        payload = {
-            "prompt": prompt,
-            "maxTokens": max_tokens,
-            "temperature": temperature,
-            "topP": top_p
-        }
+        response = self.client.embeddings.create(
+            model="bedrock/amazon.titan-embed-text-v2:0",
+            input=text,  # Se usa "prompt", no "messages"
+            encoding_format=None
+        )
+        
+        return response.data[0].embedding  # Devuelve el vector de embedding
 
-        try:
-            response = self.client.invoke_model(
-                modelId="amazon.titan-text-express-v1",
-                contentType="application/json",
-                accept="application/json",
-                body=json.dumps(payload)
-            )
+    # def generate_response_with_columns(self, prompt, columns, **kwargs):
+    #     """
+    #     Envía un prompt a Titan incluyendo una lista de atributos de archivos.
 
-            response_body = json.loads(response["body"].read().decode("utf-8"))
-            return response_body["results"][0]["outputText"].strip()
-
-        except Exception as e:
-            print(f" Error al llamar a Titan: {e}")
-            return None  # Retorna None si hay error
-
-    def generate_response_with_columns(self, prompt, columns, **kwargs):
-        """
-        Envía un prompt a Titan incluyendo una lista de atributos de archivos.
-
-        :param prompt: Texto de entrada para el modelo Titan.
-        :param columns: Lista de nombres de columnas a incluir en el prompt.
-        :param kwargs: Parámetros opcionales (max_tokens, temperature, top_p).
-        :return: Texto generado por el modelo Titan.
-        """
-        full_prompt = f"{prompt} Los atributos de los archivos son: {', '.join(columns)}."
-        return self.generate_response(full_prompt, **kwargs)
+    #     :param prompt: Texto de entrada para el modelo Titan.
+    #     :param columns: Lista de nombres de columnas a incluir en el prompt.
+    #     :param kwargs: Parámetros opcionales (max_tokens, temperature, top_p).
+    #     :return: Texto generado por el modelo Titan.
+    #     """
+    #     full_prompt = f"{prompt} Los atributos de los archivos son: {', '.join(columns)}."
+    #     return self.generate_response(full_prompt, **kwargs)
 
 #  Ejemplo de uso:
 titan = TitanClient()
+embedding1 = titan.get_embedding("Huevo")
+embedding2 = titan.get_embedding("Gallina")
+print(embedding1[:5])  # Muestra los primeros valores del embedding
+print(embedding2[:5])
 
-prompt = "Explica la importancia de los datos en la salud."
-respuesta = titan.generate_response(prompt)
-print("Titan dice:", respuesta)
+def cosine_similarity_basic(vec1, vec2):
+    # Producto punto
+    dot_product = sum(a * b for a, b in zip(vec1, vec2))
+    
+    # Norma de los vectores
+    norm_vec1 = math.sqrt(sum(a * a for a in vec1))
+    norm_vec2 = math.sqrt(sum(b * b for b in vec2))
+    
+    # Similitud del coseno
+    return dot_product / (norm_vec1 * norm_vec2)
 
-columnas = ["Nombre", "Edad", "Diagnóstico"]
+# Comparar los embeddings de "perro" y "gato" usando la similitud del coseno
+similarity = cosine_similarity_basic(embedding1, embedding2)
+print("Similitud entre 'perro' y 'gato':", similarity)
+
+
+
+""" columnas = ["Nombre", "Edad", "Diagnóstico"]
 respuesta_columnas = titan.generate_response_with_columns("Analiza estos datos médicos.", columnas)
-print("Análisis de datos médicos:", respuesta_columnas)
+print("Análisis de datos médicos:", respuesta_columnas) """

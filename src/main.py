@@ -1,6 +1,6 @@
 from data_handler import atributos_archivos, directorio
 from gemini_api_calls import new_gemini_prompt
-from promptStack import PromptStack
+from prompt_stack import PromptStack
 from graph_generator import GraphicAgent
 
 # Obtener columnas de los CSV
