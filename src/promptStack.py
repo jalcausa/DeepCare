@@ -1,3 +1,5 @@
+from api_calls import new_gemini_prompt
+
 class PromptStack:
     contador = 0
     def __init__(self):
@@ -8,6 +10,10 @@ class PromptStack:
         self.historial_preguntas.append(pregunta)
         self.contador = self.contador + 1
         return pregunta
+
+    def verPromptAnterior(self, petition):
+        consulta = new_gemini_prompt("Se ha realizado la siguiente pregunta: " + petition + "Crees que es necesario consultar la pregunta que el usuario realizó previamente para entender el contexto del que se habla? Responde SI en caso afirmativo, NO en caso negativo.")
+        return consulta
 
     def obtener_penultima_pregunta(self):
         """Obtiene la última pregunta sin eliminarla de la pila."""
