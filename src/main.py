@@ -1,15 +1,15 @@
 from data_handler import atributos_archivos, directorio
 from api_calls import new_gemini_prompt
 from promptStack import PromptStack
-import graph_generator
+from graph_generator import GraphicAgent
 
 # Obtener columnas de los CSV
 prueba_columnas = atributos_archivos(directorio)
 #print("Columnas de los archivos:", prueba_columnas)
 
-# Ejemplo de uso
-gestorStack = PromptStack()
 
+gestorStack = PromptStack()
+agenteGrafico = GraphicAgent()
 
 def verPromptAnterior(petition):
 	consulta = new_gemini_prompt("Se ha realizado la siguiente pregunta: " + petition + "Crees que es necesario consultar la pregunta que el usuario realizó previamente para entender el contexto del que se habla? Responde SI en caso afirmativo, NO en caso negativo.")
