@@ -16,9 +16,6 @@ def generar_codigo_grafico(peticion):
 
 	Usa pandas para leer el archivo. Ten en cuenta que puede haber filas con columnas sin valores y debes manejarlo correctamente. Usa `na_values=[""]` y `keep_default_na=False` para tratar los valores vacíos correctamente.  
 
-	Asegúrate de que la columna de ID de paciente se llame `PacienteID` y que `Fecha` y `Hora` se combinen en una nueva columna `fecha_hora` con `pd.to_datetime()`.
-    
-    Si alguna línea tiene más campos de los que debería considerala no válida y no la incluyas en el gráfico.
 	Usa seaborn/matplotlib para graficar los datos.  
 
 	Asegúrate de que el código sea ejecutable y claro.  
