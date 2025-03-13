@@ -1,13 +1,7 @@
 import re
 import matplotlib.pyplot as plt
 import google.generativeai as genai
-from dotenv import load_dotenv
-import os
-
-
-load_dotenv(override=True)
-API_KEY = os.getenv("API_KEY")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+from config import API_KEY, GEMINI_API_KEY
 
 genai.configure(api_key=GEMINI_API_KEY)
 
