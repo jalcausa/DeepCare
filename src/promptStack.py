@@ -1,4 +1,4 @@
-class AsistenteResumenes:
+class PromptStack:
     contador = 0
     def __init__(self):
         self.historial_preguntas = []  # Usamos una lista como pila

@@ -9,7 +9,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-2.0-flash")
 
 def generar_codigo_grafico(peticion):
-    """Genera un código en Python basado en la petición del usuario usando Gemini"""
+
     
     prompt = f"""Genera un código en Python que grafique datos.  
 	La petición del usuario es: {peticion}.  
@@ -53,8 +53,8 @@ peticion_usuario = input("¿Qué quieres visualizar?\n")
 codigo_generado = generar_codigo_grafico(peticion_usuario)
 codigo_limpio = limpiar_codigo(codigo_generado)
 
-print("Código generado:\n", codigo_generado)
-print("Código limpio:\n ", codigo_limpio)
+#print("Código generado:\n", codigo_generado)
+#print("Código limpio:\n ", codigo_limpio)
 
 ejecutar_codigo(codigo_limpio)
 
