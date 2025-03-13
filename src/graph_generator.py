@@ -40,13 +40,14 @@ def ejecutar_codigo(codigo):
     except Exception as e:
         print(f"Error al ejecutar el código: {e}")
 
-
+'''
 # Ejemplo de uso:
-peticion_usuario = input("¿Qué quieres visualizar?")
+peticion_usuario = input("¿Qué quieres visualizar?\n")
 codigo_generado = generar_codigo_grafico(peticion_usuario)
 codigo_limpio = limpiar_codigo(codigo_generado)
 
 print("Código generado:\n", codigo_generado)
 print("Código limpio:\n ", codigo_limpio)
 
-ejecutar_codigo(codigo_limpio)
+ejecutar_codigo(codigo_limpio)'
+'''
