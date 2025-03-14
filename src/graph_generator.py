@@ -41,7 +41,8 @@ class GraphicAgent:
             print("Código ejecutado exitosamente.")
         except Exception as e:
             print(f"Error al ejecutar el código: {e}")
-
+'''
+# Ejemplo de uso
 agente_grafico = GraphicAgent()
 
 # Define una petición de ejemplo
@@ -59,3 +60,4 @@ print(codigo_generado)
 
 # Ejecutar el código generado (esto generará el gráfico)
 agente_grafico.ejecutar_codigo(codigo_generado)
+'''
