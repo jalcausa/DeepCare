@@ -28,7 +28,7 @@ function App() {
     setIsLoading(true);
 
     try {
-      // Llamada al backend
+      // Llamada al backend 	
       const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
         headers: {
