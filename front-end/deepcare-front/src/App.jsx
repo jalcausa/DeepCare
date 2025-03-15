@@ -19,22 +19,20 @@ function App() {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // Guarda el mensaje ingresado, ya que luego lo borramos del input
-    const mensajeUsuario = input;
-
     // Agregar mensaje del usuario a la lista
+    const mensajeUsuario = input;
     setMessages((prev) => [...prev, { role: "user", content: mensajeUsuario }]);
     setInput("");
     setIsLoading(true);
 
     try {
-      // Llamada al backend 	
-      const res = await fetch("http://localhost:5000/chat", {
+      // Llamada al backend
+      const res = await fetch("http://localhost:5000/generar_grafico", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ mensaje: mensajeUsuario }),
+        body: JSON.stringify({ peticion: mensajeUsuario }),
       });
 
       if (!res.ok) {
@@ -43,11 +41,28 @@ function App() {
 
       const data = await res.json();
 
-      // Suponemos que el backend devuelve { "respuesta": "Texto de la respuesta" }
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", content: data.respuesta },
-      ]);
+      // Verificar si la respuesta contiene un gráfico
+      if (data.tipo === "grafico") {
+        // Mostrar el gráfico como imagen en el chat
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "bot",
+            content: (
+              <img
+                src={`data:image/png;base64,${data.grafico}`}
+                alt="Gráfico generado"
+              />
+            ),
+          },
+        ]);
+      } else if (data.tipo === "texto") {
+        // Si es texto, mostrarlo normalmente
+        setMessages((prev) => [
+          ...prev,
+          { role: "bot", content: data.respuesta },
+        ]);
+      }
     } catch (error) {
       console.error("Error:", error);
       setMessages((prev) => [
@@ -65,7 +80,11 @@ function App() {
       <div className="chat-messages">
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.role}`}>
-            <div className="message-content">{message.content}</div>
+            <div className="message-content">
+              {typeof message.content === "string"
+                ? message.content
+                : message.content}
+            </div>
           </div>
         ))}
         {isLoading && (

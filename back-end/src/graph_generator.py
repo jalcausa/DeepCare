@@ -1,8 +1,12 @@
 import os
 import re
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import google.generativeai as genai
 from anthropic_api_calls import AnthropicClient
+import io
+import base64
 from config import API_KEY
 
 
@@ -27,6 +31,26 @@ class GraphicAgent:
         respuesta = self.client.get_response(prompt)
         return respuesta
     
+    def generar_codigo_base_64(self, peticion, archivo_csv=None):
+        """Genera código Python para graficar según la petición del usuario, opcionalmente usando un archivo CSV."""
+        prompt = f"""Genera código Python para crear un gráfico y guardarlo como PNG.
+        INSTRUCCIONES CRÍTICAS:
+        1. NO uses plt.show()
+        2. Asegúrate de crear una figura con plt.figure()
+        3. Usa plt.savefig() para guardar en BytesIO
+        4. Incluye los imports necesarios
+        5. No incluyas explicaciones, solo el código. La primera línea debe empezar con import.
+        Petición del usuario: {peticion}
+        """
+        
+        if archivo_csv:
+            prompt += f"""
+            El archivo CSV a utilizar es: {archivo_csv}. 
+            Asegúrate de incluir el código para leer este archivo y seleccionar las columnas adecuadas.
+            """
+        respuesta = self.client.get_response(prompt)
+        return respuesta
+    
 
     def limpiar_codigo(self, codigo):
         """Elimina etiquetas de código Markdown como ```python y ```"""
@@ -41,6 +65,34 @@ class GraphicAgent:
             print("Código ejecutado exitosamente.")
         except Exception as e:
             print(f"Error al ejecutar el código: {e}")
+
+    def ejecutar_codigo_2(self, codigo):
+        """Ejecuta el código generado dinámicamente en un entorno seguro."""
+        entorno_seguro = {}
+        try:
+            codigo = self.limpiar_codigo(codigo)
+            print("Código ejecutado:")
+            print(codigo)
+            exec(codigo, entorno_seguro)
+            img_buf = io.BytesIO()
+            plt.savefig(img_buf, format='png', bbox_inches='tight')
+            plt.close()  # Limpiar memoria
+            img_buf.seek(0)
+            return base64.b64encode(img_buf.read()).decode('utf-8')
+        except Exception as e:
+            print(f"Error al ejecutar el código: {e}")        
+
+    def grafico_base_64(self):
+        fig, ax = plt.subplots()
+        ax.plot([1, 2, 3], [1, 4, 9])  # Ejemplo de gráfico
+
+        # Guardar el gráfico en un objeto en memoria
+        img_buf = io.BytesIO()
+        fig.savefig(img_buf, format="png")
+        img_buf.seek(0)
+        
+        # Convertir la imagen en base64
+        return base64.b64encode(img_buf.getvalue()).decode('utf-8')
 '''
 # Ejemplo de uso
 agente_grafico = GraphicAgent()
