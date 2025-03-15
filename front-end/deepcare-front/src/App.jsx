@@ -19,21 +19,40 @@ function App() {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // Agregar mensaje del usuario
-    setMessages((prev) => [...prev, { role: "user", content: input }]);
+    // Guarda el mensaje ingresado, ya que luego lo borramos del input
+    const mensajeUsuario = input;
+
+    // Agregar mensaje del usuario a la lista
+    setMessages((prev) => [...prev, { role: "user", content: mensajeUsuario }]);
     setInput("");
     setIsLoading(true);
 
     try {
-      // Simular llamada al backend
-      const simulatedResponse = `Respuesta simulada para: ${input}`;
+      // Llamada al backend
+      const res = await fetch("http://localhost:5000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ mensaje: mensajeUsuario }),
+      });
 
-      // Simular retraso de red
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      if (!res.ok) {
+        throw new Error("Error en la respuesta del servidor");
+      }
 
+      const data = await res.json();
+
+      // Suponemos que el backend devuelve { "respuesta": "Texto de la respuesta" }
       setMessages((prev) => [
         ...prev,
-        { role: "bot", content: simulatedResponse },
+        { role: "bot", content: data.respuesta },
+      ]);
+    } catch (error) {
+      console.error("Error:", error);
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", content: "Ocurrió un error al procesar tu mensaje." },
       ]);
     } finally {
       setIsLoading(false);

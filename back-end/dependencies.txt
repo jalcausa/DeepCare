@@ -10,3 +10,5 @@ matplotlib:
 	pip install matplotlib
 seaborn:
 	pip install seaborn
+flask:
+	pip install flask flask-cors pandas
