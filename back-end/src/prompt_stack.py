@@ -31,7 +31,7 @@ class PromptStack:
         number = self.verPromptAnterior(petition)
         consulta = self.historial_preguntas[len(self.historial_preguntas) - number - 1:]
        # print("\n La consulta de preguntas es: " + "::".join(consulta))
-        encadenado = "Debes responder únicamente a la siguiente pregunta: " + petition + ". Para tener más contexto sobre a lo que se refiere esta pregunta, aquí tienes la lista de preguntas que se han realizado anteriormente: " + " ::: ".join(consulta)
+        encadenado = "Debes responder únicamente a la siguiente pregunta, no me indiques en la respuesta nada de lo que has consultado para obtener el contexto: " + petition + ". Para tener más contexto sobre a lo que se refiere esta pregunta, aquí tienes la lista de preguntas que se han realizado anteriormente: " + " ::: ".join(consulta)
        # print("Prompt encadenado: " + encadenado)
         return encadenado
 
