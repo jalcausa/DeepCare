@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import pandas as pd
+from anthropic_api_calls import AnthropicClient
+from main import procesarInput
 
 app = Flask(__name__)
 CORS(app)  # Permite peticiones desde otros orígenes, como tu frontend en localhost:5173
@@ -13,10 +14,10 @@ def chat():
         return jsonify({"error": "No se envió el mensaje"}), 400
 
     mensaje_usuario = data["mensaje"]
-
     # Aquí realizamos el procesamiento del mensaje del usuario
-    respuesta_modelo = f"Respuesta procesada para: {mensaje_usuario}"
-
+    client = procesarInput()
+    respuesta_modelo = client.procesarInput(mensaje_usuario)
+    # 
     # Si tenemos que enviar además una imagen, podemos enviar una URL o base64 string
     return jsonify({"respuesta": respuesta_modelo})
 

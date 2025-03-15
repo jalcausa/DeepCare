@@ -36,26 +36,26 @@ class TitanClient:
     #     return self.generate_response(full_prompt, **kwargs)
 
 #  Ejemplo de uso:
-titan = TitanClient()
-embedding1 = titan.get_embedding("Huevo")
-embedding2 = titan.get_embedding("Gallina")
-print(embedding1[:5])  # Muestra los primeros valores del embedding
-print(embedding2[:5])
+# titan = TitanClient()
+# embedding1 = titan.get_embedding("Huevo")
+# embedding2 = titan.get_embedding("Gallina")
+# print(embedding1[:5])  # Muestra los primeros valores del embedding
+# print(embedding2[:5])
 
-def cosine_similarity_basic(vec1, vec2):
-    # Producto punto
-    dot_product = sum(a * b for a, b in zip(vec1, vec2))
+# def cosine_similarity_basic(vec1, vec2):
+#     # Producto punto
+#     dot_product = sum(a * b for a, b in zip(vec1, vec2))
     
-    # Norma de los vectores
-    norm_vec1 = math.sqrt(sum(a * a for a in vec1))
-    norm_vec2 = math.sqrt(sum(b * b for b in vec2))
+#     # Norma de los vectores
+#     norm_vec1 = math.sqrt(sum(a * a for a in vec1))
+#     norm_vec2 = math.sqrt(sum(b * b for b in vec2))
     
-    # Similitud del coseno
-    return dot_product / (norm_vec1 * norm_vec2)
+#     # Similitud del coseno
+#     return dot_product / (norm_vec1 * norm_vec2)
 
-# Comparar los embeddings de "perro" y "gato" usando la similitud del coseno
-similarity = cosine_similarity_basic(embedding1, embedding2)
-print("Similitud entre 'perro' y 'gato':", similarity)
+# # Comparar los embeddings de "perro" y "gato" usando la similitud del coseno
+# similarity = cosine_similarity_basic(embedding1, embedding2)
+# print("Similitud entre 'perro' y 'gato':", similarity)
 
 
 
