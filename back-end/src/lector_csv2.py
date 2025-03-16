@@ -3,6 +3,7 @@ import io
 import os
 from datetime import datetime
 import re
+from data_handler import ruta_archivos, directorio
 
 def read_csv(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -32,14 +33,9 @@ def validate_row(row, expected_columns):
         return f"ANOMALY: Missing columns - Expected {expected_columns}, got {len(row)}"
     return None
 
-file_paths = {
-    'evolucion': r'D:\USUARIO\Documentos\UNIVERSIDAD\DATATHON\DeepCare\back-end\data\resumen_evolucion.csv',
-    'lab_iniciales': r'D:\USUARIO\Documentos\UNIVERSIDAD\DATATHON\DeepCare\back-end\data\resumen_lab_iniciales.csv',
-    'medicacion': r'D:\USUARIO\Documentos\UNIVERSIDAD\DATATHON\DeepCare\back-end\data\resumen_medicacion.csv',
-    'notas': r'D:\USUARIO\Documentos\UNIVERSIDAD\DATATHON\DeepCare\back-end\data\resumen_notas.csv',
-    'procedimientos': r'D:\USUARIO\Documentos\UNIVERSIDAD\DATATHON\DeepCare\back-end\data\resumen_procedimientos.csv'
-}
 
+# Define the file paths relative to the base directory of the project
+file_paths = ruta_archivos(directorio)
 result = {}
 
 for file_key, file_path in file_paths.items():
@@ -64,6 +60,7 @@ for file_key, file_path in file_paths.items():
         result[file_key]['data'][row_num] = validated_row
 
 # Filter data for patient 1
-patient_1_data = {file_key: {'headers': file_data['headers'], 'data': {row_num: row for row_num, row in file_data['data'].items() if row[0] == '1'}} for file_key, file_data in result.items()}
+def obtenerDatosPaciente(patientID):
+    patient_data = {file_key: {'headers': file_data['headers'], 'data': {row_num: row for row_num, row in file_data['data'].items() if row[0] == patientID}} for file_key, file_data in result.items()}
 
-result = patient_1_data
+    return patient_data

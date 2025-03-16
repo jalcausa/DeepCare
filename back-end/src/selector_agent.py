@@ -9,7 +9,7 @@ class SelectorAgent:
         return(respuesta)
     
     def seleccionarAgente(self, petition):
-        agentes = self.client.get_response(
+        respuesta = self.client.get_response(
             '''
             You are a planning agent.
             Your job is to break down complex tasks into smaller, manageable subtasks.
@@ -22,10 +22,16 @@ class SelectorAgent:
             
             You only plan and delegate tasks — you do not execute them yourself.
 
-            Answer EXCLUSIVELY with the name of the agent you think is more likely to solve the problem.
+            ###EXTREMELY IMPORTANT###
+            Your response must be exclusively of this type 'agent,number' , where the first position is the 
+            name of the agent to use, and the second position is the patient number you 
+            were asked about. If no specific patient was mentioned, or if more than one 
+            patient was asked about at once, return -1 as the second position.
+
             
             The prompt : ''' + petition)
         
+        agentes = respuesta.split(',')
         #print(agentes)
         return agentes
     
