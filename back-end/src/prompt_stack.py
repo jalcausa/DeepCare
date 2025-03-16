@@ -32,19 +32,28 @@ class PromptStack:
         2. **If not, analyze the previous questions one by one (starting from the most recent):**
             - Look at the last question in the stack. If that context helps you understand the current question, increase your counter by **1**.
             - If you still don't have enough context, move to the previous question in the stack and increase your counter again.
-        - Repeat this process until you have enough context to accurately answer the current question.
+            - Repeat this process until you have enough context to accurately answer the current question. 
+            How can you know if you have enough context? Let me break it down to you:
+                2.1. **Identify the Key Theme**: Look at the current question to identify the key theme. 
+                For example, if the current question is "Can you summarize the evolution of patient 4?", 
+                the theme is "evolution summary" and "patient 4".
+            Now go back to the user's question. Can you identify the Key Theme? Are you sure? If not, you 
+            definetely need more context.
 
         3. **Your final response must be ONLY the total number of past questions you had to check to gain sufficient context.**
 
 ### Example:
-Imagine the current question is: **"What about Portugal?"**  
-And the recent question stack is: **["How many wheels does a car have?" ::: "What is the capital of France?" ::: "And Spain?"]**
+Imagine the current prompt is: "Do the same for number 4"
+And the recent prompt stack is: ["Please summarize the evolution of patient 1" ::: "Now, summarize the evolution of patient 2" ::: "Now, patient 3"]
 
-- You can't answer **'What about Portugal?'** without context. So, check the last question: **'And Spain?'** → Increase counter to **1**.
-- This still doesn't provide enough context. Check the previous question: **'What is the capital of France?'** → Increase counter to **2**.
-- Now, you understand that the user is asking about capital cities. You can confidently answer.
+First, initialize to 0 the counter.
+You can't answer "Do the same for number 4" without context. So, check the last prompt: 'Now, patient 3' → Increase counter to 1.
+This still doesn't provide enough context. Check the previous prompt: 'Now, summarize the evolution of patient 2' → Increase counter to 2.
+Now, you understand that the user is asking for the evolution summaries of specific patients. You can confidently answer. So your answer
+is the value of the counter, which is 2 in this example.
+ **Final response of this example: 2**
 
- **Final response: 2**
+Use the example as a way to understand and answer correctly.
 
 **REMEMBER: Your response must be a single number. No explanations, no extra text. Just the number.**
 """

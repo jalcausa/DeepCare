@@ -40,7 +40,7 @@ class ProcesadorInput:
             data = self.fileAgent.getInfo(prompt_encadenado)
         else:
             data = None
-        if (agent.strip().split(',') == "GraphGenerator"):
+        if (agent.strip() == "GraphGenerator"):
             codigo = self.agenteGrafico.generar_codigo(prompt_encadenado, data)
             respuesta= self.agenteGrafico.ejecutar_codigo(codigo)
             respuesta_json = jsonify({"tipo": "grafico", "grafico": respuesta})
