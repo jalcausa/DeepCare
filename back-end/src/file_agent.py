@@ -23,7 +23,7 @@ class FileAgent:
         if (files == "NO"):
             return "No files needed."
         prompt = f"""
-        Given the following request: "{input}", and considering the files "{files}", generate Python code using pandas to read and extract the relevant information. The contect of the files is {self.atributos}
+        Given the following request: "{input}", and considering the files "{files}", generate Python code using pandas to read and extract the relevant information. The content of the files is {self.atributos}. ONLY USE THE FILES GIVEN, don't make up any new file.
         Assume the files are in CSV format and that they are located inside {directorio}. The code should return the extracted information in a dictionary format. Don't include any explanations, just the code. The code must start with import.
         """
         
