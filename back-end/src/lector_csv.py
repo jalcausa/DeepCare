@@ -1,67 +1,66 @@
 import csv
 import io
-import re
+import os
 from datetime import datetime
+import re
+from data_handler import ruta_archivos, directorio
 
 def read_csv(file_path):
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return list(csv.reader(file))
+    with open(file_path, 'r', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        headers = next(reader)
+        data = {i: row for i, row in enumerate(reader)}
+    return headers, data
 
 def validate_date(date_str):
     try:
-        return datetime.strptime(date_str, '%Y-%m-%d')
+        datetime.strptime(date_str, '%Y-%m-%d')
+        return date_str
     except ValueError:
-        try:
-            return datetime.strptime(date_str, '%d/%m/%Y')
-        except ValueError:
-            return None
+        return f"ANOMALY: Invalid date format - {date_str}"
 
 def validate_numeric(value):
     try:
-        return float(value.replace(',', '.'))
+        float_value = float(value.replace(',', '.'))
+        return str(float_value)
     except ValueError:
-        return None
+        return f"ANOMALY: Non-numeric value - {value}"
 
-def validate_range(value, min_val, max_val):
-    if value is not None and min_val <= value <= max_val:
-        return value
+def validate_row(row, expected_columns):
+    if len(row) > expected_columns:
+        return f"ANOMALY: Extra columns detected - {row[expected_columns:]}"
+    elif len(row) < expected_columns:
+        return f"ANOMALY: Missing columns - Expected {expected_columns}, got {len(row)}"
     return None
 
-file_path = '/Users/jcalcausal/Documents/Carrera/DeepCare/back-end/data/resumen_evolucion.csv'
-data = read_csv(file_path)
 
-headers = data[0]
+# Define the file paths relative to the base directory of the project
+file_paths = ruta_archivos(directorio)
 result = {}
 
-for i, row in enumerate(data[1:], start=1):
-    if len(row) != len(headers):
-        result[i] = f"Inconsistent data: {row}"
-        continue
+for file_key, file_path in file_paths.items():
+    headers, data = read_csv(file_path)
+    result[file_key] = {'headers': headers, 'data': {}}
 
-    validated_row = []
-    for j, value in enumerate(row):
-        if headers[j] == 'PacienteID' and value != '2':
-            break
-        elif headers[j] in ['Fecha', 'Hora']:
-            validated_value = value
-        elif headers[j] in ['PresionSistolica', 'PresionDiastolica']:
-            validated_value = validate_range(validate_numeric(value), 0, 300)
-        elif headers[j] == 'FrecuenciaCardiaca':
-            validated_value = validate_range(validate_numeric(value), 0, 300)
-        elif headers[j] == 'Temperatura':
-            validated_value = validate_range(validate_numeric(value), 30, 45)
-        elif headers[j] == 'FrecuenciaRespiratoria':
-            validated_value = validate_range(validate_numeric(value), 0, 100)
-        elif headers[j] == 'SaturacionOxigeno':
-            validated_value = validate_range(validate_numeric(value), 0, 100)
-        elif headers[j] == 'pH':
-            validated_value = validate_range(validate_numeric(value), 6.8, 7.8)
+    for row_num, row in data.items():
+        validated_row = []
+        anomaly = validate_row(row, len(headers))
+
+        if anomaly:
+            validated_row = [anomaly]
         else:
-            validated_value = validate_numeric(value)
+            for i, value in enumerate(row):
+                if headers[i].lower() in ['fecha', 'fechaingreso']:
+                    validated_row.append(validate_date(value))
+                elif headers[i].lower() in ['presionsistolica', 'presiondiastolica', 'frecuenciacardiaca', 'temperatura', 'frecuenciarespiratoria', 'saturacionoxigeno', 'glucosa', 'leucocitos', 'hemoglobina', 'plaquetas', 'colesterol', 'hdl', 'ldl', 'trigliceridos', 'sodio', 'potasio', 'cloro', 'creatinina', 'urea', 'ast', 'alt', 'bilirrubina', 'ph', 'pco2', 'po2', 'hco3', 'lactato', 'cetonas', 'amilasa']:
+                    validated_row.append(validate_numeric(value))
+                else:
+                    validated_row.append(value)
 
-        if validated_value is None:
-            validated_value = f"Anomaly: {value}"
-        validated_row.append(validated_value)
+        result[file_key]['data'][row_num] = validated_row
 
-    if len(validated_row) == len(headers):
-        result[i] = validated_row
+# Filter data for patient 1
+def obtenerDatosPaciente(patientID):
+    patient_data = {file_key: {'headers': file_data['headers'], 'data': {row_num: row for row_num, row in file_data['data'].items() if row[0] == patientID}} for file_key, file_data in result.items()}
+
+    return patient_data

@@ -7,7 +7,7 @@ from selector_agent import SelectorAgent
 from file_agent import FileAgent
 from summary_agent import SummaryAgent
 from pathlib import Path
-from lector_csv2 import obtenerDatosPaciente
+from lector_csv import obtenerDatosPaciente
 
 # Obtener columnas de los CSV
 prueba_columnas = atributos_archivos(directorio)
