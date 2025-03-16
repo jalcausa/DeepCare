@@ -41,6 +41,7 @@ class GraphicAgent:
         3. Usa plt.savefig() para guardar en BytesIO
         4. Incluye los imports necesarios
         5. No incluyas explicaciones, solo el código. La primera línea debe empezar con import.
+        6. En caso de incluir datos, usa SOLO esos datos, no intentes acceder a archivos que no existen
         Petición del usuario: {peticion}
         """
         
@@ -71,8 +72,8 @@ class GraphicAgent:
         entorno_seguro = {}
         try:
             codigo = self.limpiar_codigo(codigo)
-            print("Código ejecutado:")
-            print(codigo)
+            # print("Código ejecutado:")
+            # print(codigo)
             exec(codigo, entorno_seguro)
             img_buf = io.BytesIO()
             plt.savefig(img_buf, format='png', bbox_inches='tight')

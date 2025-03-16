@@ -26,7 +26,7 @@ class SelectorAgent:
             
             The prompt : ''' + petition)
         
-        print(agentes)
+        #print(agentes)
         return agentes
     
 # agenteSelector = SelectorAgent()
