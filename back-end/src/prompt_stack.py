@@ -25,16 +25,16 @@ class PromptStack:
                                      "En este caso, la pregunta anterior es: Y la de España? Subes el contador a 1. Sin embargo todavía no tienes contexto suficiente para " + 
                                      "responder acertadamente. Por lo tanto, consultas la pregunta anterior: Cuál es la capital de Francia? Subes el contador a 2. Ahora puedes entender que " + 
                                      "el usuario está preguntando por las capitales, luego podrías responder acertadamente su pregunta ¿Y la de Portugal? Por tanto, tu respuesta es: 2")
-       # print("\n Stack de preguntas: " + " ::: ".join(self.historial_preguntas))
-        # print("\n Número de preguntas a consultar: " + consulta.strip() + "\n")
+        print("\n Stack de preguntas: " + " ::: ".join(self.historial_preguntas))
+        print("\n Número de preguntas a consultar: " + consulta.strip() + "\n")
         return int(consulta.strip())
 
     def construirPromptEncadenado(self, petition):
         number = self.verPromptAnterior(petition)
         consulta = self.historial_preguntas[len(self.historial_preguntas) - number - 1:]
-       # print("\n La consulta de preguntas es: " + "::".join(consulta))
+        print("\n La consulta de preguntas es: " + "::".join(consulta))
         encadenado = "Debes responder únicamente a la siguiente pregunta, no me indiques en la respuesta nada de lo que has consultado para obtener el contexto: " + petition + ". Para tener más contexto sobre a lo que se refiere esta pregunta, aquí tienes la lista de preguntas que se han realizado anteriormente: " + " ::: ".join(consulta)
-       # print("Prompt encadenado: " + encadenado)
+        print("Prompt encadenado: " + encadenado)
         return encadenado
     
     def construirPromptEncadenado2(self, petition):

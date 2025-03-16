@@ -24,7 +24,7 @@ class FileAgent:
             return "No files needed."
         prompt = f"""
         Given the following request: "{input}", and considering the files "{files}", generate Python code using pandas to read and extract the relevant information. The content of the files is {self.atributos}. ONLY USE THE FILES GIVEN, don't make up any new file.
-        Assume the files are in CSV format and that they are located inside {directorio}. The code should return the extracted information in a dictionary format. Don't include any explanations, just the code. The code must start with import.
+        Assume the files are in CSV format and that they are located inside {directorio}. The code should return the extracted information in a dictionary format, in a variable named result. Don't include any explanations, just the code. The code must start with import.
         """
         
         codigo_generado = self.client.get_response(prompt)
@@ -38,6 +38,6 @@ class FileAgent:
         except Exception as e:
             return f"Error al ejecutar código generado: {e}"
 
-# fileAgent = FileAgent()
-# info = fileAgent.getInfo("Dame un resumen de los procedimientos del paciente 1")
-# print(info)
+#fileAgent = FileAgent()
+#info = fileAgent.getInfo("Dame un resumen de los procedimientos del paciente 1")
+#print(info)
