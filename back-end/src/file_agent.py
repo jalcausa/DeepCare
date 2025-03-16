@@ -39,6 +39,8 @@ The content of the files is {self.atributos}.
 - Use io.StringIO instead of pd.compat.StringIO, if necessary.
 - Be careful with errors like: "Error executing generated code: 'charmap' codec can't decode byte 0x81 in position 1435: character maps to <undefined>"
 - Be careful with errors like: "list index out of range"
+-Be careful with errors like: "Error tokenizing data. C error: Expected 30 fields in line 3, saw 31"
+
 
 ### Data Validation Requirements:
 Your code must also be capable of detecting and handling potential data anomalies, including:
@@ -70,7 +72,7 @@ Ensure that all detected anomalies are clearly flagged in the final result. REME
         # Crear un entorno seguro para la ejecución
         entorno_seguro = {"pd": pd, "io": io, "base64": base64}
         try:
-            #print(codigo_generado)
+            print(codigo_generado)
             exec(codigo_generado, entorno_seguro)
             return entorno_seguro.get("result", "No result found")
         except Exception as e:
