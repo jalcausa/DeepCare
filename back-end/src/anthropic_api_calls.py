@@ -9,11 +9,13 @@ class AnthropicClient:
         """Inicializa el cliente de Bedrock Runtime."""
         self.client = openai.OpenAI(api_key=API_KEY, base_url="https://litellm.dccp.pbu.dedalus.com")
 
-    def get_response(self, text):
+    def get_response(self, text, data=None):
         """
         Envía un prompt a Anthropic y devuelve la respuesta generada.
                 
         """
+        if data:
+            text = "If you need to consult any data here you have it" + str(data)
         response = self.client.chat.completions.create(
             model="bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0",
             messages = [
