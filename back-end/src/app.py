@@ -27,6 +27,7 @@ CORS(app)  # Permite peticiones desde otros orígenes, como tu frontend en local
 #     return jsonify({"respuesta": respuesta_modelo})
 
 # Ejemplo de endpoint /generar_grafico
+agentProcesor = ProcesadorInput()
 @app.route('/chat', methods=['POST'])
 def chat():
     # # Extraer la petición del cuerpo de la solicitud JSON
@@ -39,9 +40,9 @@ def chat():
     mensaje_usuario = data.get('peticion', '')
     
     # Aquí realizamos el procesamiento del mensaje del usuario
-    agentProcesor = ProcesadorInput()
+
     return agentProcesor.procesarInput(mensaje_usuario)
 
 if __name__ == '__main__':
     # Ejecuta el servidor en el puerto 5000
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000, threaded=True)

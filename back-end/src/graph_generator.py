@@ -71,8 +71,8 @@ class GraphicAgent:
         entorno_seguro = {}
         try:
             codigo = self.limpiar_codigo(codigo)
-            print("Código ejecutado:")
-            print(codigo)
+            #print("Código ejecutado:")
+            #print(codigo)
             exec(codigo, entorno_seguro)
             img_buf = io.BytesIO()
             plt.savefig(img_buf, format='png', bbox_inches='tight')
