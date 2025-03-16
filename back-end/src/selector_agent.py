@@ -35,7 +35,7 @@ class SelectorAgent:
         
         return agentes
     
-agenteSelector = SelectorAgent()
+# agenteSelector = SelectorAgent()
 
-prompt = input("Qué tarea quieres hacer?")
-print(agenteSelector.seleccionarAgente(prompt))
+# prompt = input("Qué tarea quieres hacer?")
+# print(agenteSelector.seleccionarAgente(prompt))
