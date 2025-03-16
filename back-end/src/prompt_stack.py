@@ -13,18 +13,43 @@ class PromptStack:
         return pregunta
 
     def verPromptAnterior(self, petition):
-        consulta = PromptStack.client.get_response("TU RESPUESTA A ESTA CONSULTA DEBE SER ÚNICA Y EXCLUSIVAMENTE UN NÚMERO. Lo que viene a continuación " +
-                                     " es para que sepas cómo razonar antes de responder. Se ha realizado la siguiente pregunta: " + petition + 
-                                     "Si crees que es necesario obtener más información sobre el contexto de la pregunta, aquí te dejo el stack de preguntas que se han hecho recientemente." + " ::: ".join(self.historial_preguntas) +
-                                     ". TU RESPUESTA A ESTA CONSULTA DEBE SER ÚNICA Y EXCLUSIVAMENTE EL NÚMERO DE PREGUNTAS ANTERIORES QUE DEBEN SER CONSULTADAS PARA PODER RESPONDER A LA PREGUNTA ACTUAL DE FORMA CORRECTA." +
-                                     " Primero, piensa paso a paso. ¿Crees que serías capaz de responder con precisión a la pregunta, sin necesidad de contexto adicional? Si la respuesta es no, piensa inductivamente. Mira la pregunta que se hizo anteriormente " +
-                                     "en el stack de preguntas que te he pasado. Con el contexto en el que se hizo esa pregunta, serías capaz de responder ahora a la pregunta actual? Si la respuesta es no, vuelve a mirar otra pregunta, hasta que creas que "
-                                     "puedes responder con precisión. Ve contando cuántas preguntas has tenido que consultar, y responde únicamente con ese número. " +
-                                     "Te pongo un ejemplo. Imagina que la pregunta actual es: ¿Y la de Portugal?. Imagina que el stack de preguntas anteriores es: [Cuántas ruedas tiene un coche? ::: Cuál es la capital de Francia? ::: Y la de España?]" + 
-                                     ". Entonces como no puedes responder a la pregunta ¿Y la de Portugal? sin un contexto previo, miras la pregunta anterior. "+ 
-                                     "En este caso, la pregunta anterior es: Y la de España? Subes el contador a 1. Sin embargo todavía no tienes contexto suficiente para " + 
-                                     "responder acertadamente. Por lo tanto, consultas la pregunta anterior: Cuál es la capital de Francia? Subes el contador a 2. Ahora puedes entender que " + 
-                                     "el usuario está preguntando por las capitales, luego podrías responder acertadamente su pregunta ¿Y la de Portugal? Por tanto, tu respuesta es: 2")
+        prompt = prompt = f"""
+        YOUR RESPONSE TO THIS QUERY MUST BE A SINGLE NUMBER. No explanations, no additional text—just the number.
+
+        The following instructions will guide your reasoning before responding.
+
+        A user has asked the following question:
+        "{petition}"
+
+        If you believe that additional context is necessary to accurately answer this question, here is the stack of recent questions that have been asked:
+        {" ::: ".join(self.historial_preguntas)}
+
+        ### How to determine your response:
+        1. **First, think step by step:**
+           - Can you confidently answer the current question without any additional context?
+           - If yes, your response is **0**.
+
+        2. **If not, analyze the previous questions one by one (starting from the most recent):**
+            - Look at the last question in the stack. If that context helps you understand the current question, increase your counter by **1**.
+            - If you still don't have enough context, move to the previous question in the stack and increase your counter again.
+        - Repeat this process until you have enough context to accurately answer the current question.
+
+        3. **Your final response must be ONLY the total number of past questions you had to check to gain sufficient context.**
+
+### Example:
+Imagine the current question is: **"What about Portugal?"**  
+And the recent question stack is: **["How many wheels does a car have?" ::: "What is the capital of France?" ::: "And Spain?"]**
+
+- You can't answer **'What about Portugal?'** without context. So, check the last question: **'And Spain?'** → Increase counter to **1**.
+- This still doesn't provide enough context. Check the previous question: **'What is the capital of France?'** → Increase counter to **2**.
+- Now, you understand that the user is asking about capital cities. You can confidently answer.
+
+ **Final response: 2**
+
+**REMEMBER: Your response must be a single number. No explanations, no extra text. Just the number.**
+"""
+
+        consulta = PromptStack.client.get_response(prompt)
         print("\n Stack de preguntas: " + " ::: ".join(self.historial_preguntas))
         print("\n Número de preguntas a consultar: " + consulta.strip() + "\n")
         return int(consulta.strip())
@@ -33,7 +58,10 @@ class PromptStack:
         number = self.verPromptAnterior(petition)
         consulta = self.historial_preguntas[len(self.historial_preguntas) - number - 1:]
         print("\n La consulta de preguntas es: " + "::".join(consulta))
-        encadenado = "Debes responder únicamente a la siguiente pregunta, no me indiques en la respuesta nada de lo que has consultado para obtener el contexto: " + petition + ". Para tener más contexto sobre a lo que se refiere esta pregunta, aquí tienes la lista de preguntas que se han realizado anteriormente: " + " ::: ".join(consulta)
+        encadenado = f"""You must respond only to the following question. Do not include any 
+            information about what you have consulted to obtain the context in your response: "{petition}". 
+            To have more context about what this question refers to, here is 
+            the list of previously asked questions: {" ::: ".join(consulta)}"""
         print("Prompt encadenado: " + encadenado)
         return encadenado
     
