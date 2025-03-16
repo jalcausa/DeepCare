@@ -8,30 +8,31 @@ from anthropic_api_calls import AnthropicClient
 import io
 import base64
 from config import API_KEY
+from data_handler import directorio
 
 
 class GraphicAgent:
     def __init__(self):
         self.client = AnthropicClient()
     
-    def generar_codigo_grafico(self, peticion, archivo_csv=None):
-        """Genera código Python para graficar según la petición del usuario, opcionalmente usando un archivo CSV."""
-        prompt = f"""Genera un código en Python que grafique datos.
-        La petición del usuario es: {peticion}.
-        Si se proporciona un archivo CSV, lee los datos con pandas y usa seaborn/matplotlib para graficar.
-        Asegúrate de que el código sea ejecutable y claro.
-        No incluyas explicaciones, solo el código. La primera línea debe empezar con import.
-        """
+    # def generar_codigo_grafico(self, peticion, archivo_csv=None):
+    #     """Genera código Python para graficar según la petición del usuario, opcionalmente usando un archivo CSV."""
+    #     prompt = f"""Genera un código en Python que grafique datos.
+    #     La petición del usuario es: {peticion}.
+    #     Si se proporciona un archivo CSV, lee los datos con pandas y usa seaborn/matplotlib para graficar.
+    #     Asegúrate de que el código sea ejecutable y claro.
+    #     No incluyas explicaciones, solo el código. La primera línea debe empezar con import.
+    #     """
         
-        if archivo_csv:
-            prompt += f"""
-            El archivo CSV a utilizar es: {archivo_csv}. 
-            Asegúrate de incluir el código para leer este archivo y seleccionar las columnas adecuadas.
-            """
-        respuesta = self.client.get_response(prompt)
-        return respuesta
+    #     if archivo_csv:
+    #         prompt += f"""
+    #         El archivo CSV a utilizar es: {archivo_csv}. 
+    #         Asegúrate de incluir el código para leer este archivo y seleccionar las columnas adecuadas.
+    #         """
+    #     respuesta = self.client.get_response(prompt)
+    #     return respuesta
     
-    def generar_codigo_base_64(self, peticion, archivo_csv=None):
+    def generar_codigo(self, peticion, data=None):
         """Genera código Python para graficar según la petición del usuario, opcionalmente usando un archivo CSV."""
         prompt = f"""Genera código Python para crear un gráfico y guardarlo como PNG.
         INSTRUCCIONES CRÍTICAS:
@@ -43,10 +44,9 @@ class GraphicAgent:
         Petición del usuario: {peticion}
         """
         
-        if archivo_csv:
+        if data:
             prompt += f"""
-            El archivo CSV a utilizar es: {archivo_csv}. 
-            Asegúrate de incluir el código para leer este archivo y seleccionar las columnas adecuadas.
+            Los datos que debes usar son los siguientes: {data}.
             """
         respuesta = self.client.get_response(prompt)
         return respuesta
@@ -56,17 +56,17 @@ class GraphicAgent:
         """Elimina etiquetas de código Markdown como ```python y ```"""
         return re.sub(r"```[a-z]*\n|```", "", codigo).strip()
 
-    def ejecutar_codigo(self, codigo):
-        """Ejecuta el código generado dinámicamente en un entorno seguro."""
-        entorno_seguro = {}
-        try:
-            codigo = self.limpiar_codigo(codigo)
-            exec(codigo, entorno_seguro)
-            print("Código ejecutado exitosamente.")
-        except Exception as e:
-            print(f"Error al ejecutar el código: {e}")
+    # def ejecutar_codigo(self, codigo):
+    #     """Ejecuta el código generado dinámicamente en un entorno seguro."""
+    #     entorno_seguro = {}
+    #     try:
+    #         codigo = self.limpiar_codigo(codigo)
+    #         exec(codigo, entorno_seguro)
+    #         print("Código ejecutado exitosamente.")
+    #     except Exception as e:
+    #         print(f"Error al ejecutar el código: {e}")
 
-    def ejecutar_codigo_2(self, codigo):
+    def ejecutar_codigo(self, codigo):
         """Ejecuta el código generado dinámicamente en un entorno seguro."""
         entorno_seguro = {}
         try:
@@ -82,17 +82,6 @@ class GraphicAgent:
         except Exception as e:
             print(f"Error al ejecutar el código: {e}")        
 
-    def grafico_base_64(self):
-        fig, ax = plt.subplots()
-        ax.plot([1, 2, 3], [1, 4, 9])  # Ejemplo de gráfico
-
-        # Guardar el gráfico en un objeto en memoria
-        img_buf = io.BytesIO()
-        fig.savefig(img_buf, format="png")
-        img_buf.seek(0)
-        
-        # Convertir la imagen en base64
-        return base64.b64encode(img_buf.getvalue()).decode('utf-8')
 '''
 # Ejemplo de uso
 agente_grafico = GraphicAgent()

@@ -27,7 +27,7 @@ function App() {
 
     try {
       // Llamada al backend
-      const res = await fetch("http://localhost:5000/generar_grafico", {
+      const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +60,7 @@ function App() {
         // Si es texto, mostrarlo normalmente
         setMessages((prev) => [
           ...prev,
-          { role: "bot", content: data.respuesta },
+          { role: "bot", content: data.texto },
         ]);
       }
     } catch (error) {

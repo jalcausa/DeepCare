@@ -5,30 +5,30 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io
 import base64
-from main import procesarInput
+from main import ProcesadorInput
 from graph_generator import GraphicAgent
 
 app = Flask(__name__)
 CORS(app)  # Permite peticiones desde otros orígenes, como tu frontend en localhost:5173
 
 # Ejemplo de endpoint /chat
-@app.route('/chat', methods=['POST'])
-def chat():
-    data = request.get_json()
-    if not data or "mensaje" not in data:
-        return jsonify({"error": "No se envió el mensaje"}), 400
+# @app.route('/chat', methods=['POST'])
+# def chat():
+#     data = request.get_json()
+#     if not data or "mensaje" not in data:
+#         return jsonify({"error": "No se envió el mensaje"}), 400
 
-    mensaje_usuario = data["mensaje"]
-    # Aquí realizamos el procesamiento del mensaje del usuario
-    client = procesarInput()
-    respuesta_modelo = client.procesarInput(mensaje_usuario)
-    # 
-    # Si tenemos que enviar además una imagen, podemos enviar una URL o base64 string
-    return jsonify({"respuesta": respuesta_modelo})
+#     mensaje_usuario = data["mensaje"]
+#     # Aquí realizamos el procesamiento del mensaje del usuario
+#     client = procesarInput()
+#     respuesta_modelo = client.procesarInput(mensaje_usuario)
+#     # 
+#     # Si tenemos que enviar además una imagen, podemos enviar una URL o base64 string
+#     return jsonify({"respuesta": respuesta_modelo})
 
 # Ejemplo de endpoint /generar_grafico
-@app.route('/generar_grafico', methods=['POST'])
-def generar_grafico():
+@app.route('/chat', methods=['POST'])
+def chat():
     # # Extraer la petición del cuerpo de la solicitud JSON
     # data = request.get_json()
     # peticion = data.get('peticion', '')  # Si no hay "peticion", se asigna un valor por defecto vacío
@@ -39,13 +39,8 @@ def generar_grafico():
     mensaje_usuario = data.get('peticion', '')
     
     # Aquí realizamos el procesamiento del mensaje del usuario
-    client = procesarInput()
-    respuesta_modelo = client.procesarInput(mensaje_usuario)
-    graphic_agent = GraphicAgent()
-    codigo_generado = graphic_agent.generar_codigo_base_64(mensaje_usuario)
-    img_base64 = graphic_agent.ejecutar_codigo_2(codigo_generado)
-    # Devolver la respuesta con el gráfico en base64
-    return jsonify({"tipo": "grafico", "grafico": img_base64})
+    agentProcesor = ProcesadorInput()
+    return agentProcesor.procesarInput(mensaje_usuario)
 
 if __name__ == '__main__':
     # Ejecuta el servidor en el puerto 5000

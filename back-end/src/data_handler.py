@@ -12,3 +12,6 @@ def atributos_archivos(directorio):
             df = pd.read_csv(ruta_archivo, nrows=0)
             columnas[archivo] = df.columns.tolist()
     return columnas
+
+# columnas = atributos_archivos(directorio)
+# print(columnas)
