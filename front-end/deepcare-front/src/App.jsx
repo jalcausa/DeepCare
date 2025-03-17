@@ -15,6 +15,15 @@ function App() {
 
   const messagesEndRef = useRef(null);
 
+  const inputRef = useRef(null);
+
+const adjustTextareaHeight = () => {
+  if (inputRef.current) {
+    inputRef.current.style.height = "auto"; 
+    inputRef.current.style.height = inputRef.current.scrollHeight + "px";
+  }
+};
+
 useEffect(() => {
   document.body.classList.toggle("dark-mode", darkMode);
   document.body.classList.remove("small-font", "medium-font", "large-font");
@@ -114,8 +123,8 @@ useEffect(() => {
         <button>🎨 Personalizar</button>
       </div>
 
-      <h1 className="chat-title">DeepCare</h1>
-
+      <h1 className="chat-title">⚕️ DeepCare</h1>
+      
       <div className="chat-messages">
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.role}`}>
@@ -137,7 +146,17 @@ useEffect(() => {
       </div>
 
       <form onSubmit={handleSubmit} className="chat-input-form">
-        <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Escribe tu mensaje..." disabled={isLoading} />
+      <textarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Escribe tu mensaje..."
+        disabled={isLoading}
+        rows="1"
+        ref={inputRef}
+        onInput={adjustTextareaHeight}
+      />
+
+
         <button type="submit" disabled={isLoading}>➤</button>
       </form>
     </div>

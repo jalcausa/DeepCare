@@ -293,6 +293,26 @@ select, label {
   display: block;
 }
 
+.chat-input-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell;
+  resize: none; /* Evita el redimensionamiento manual */
+  overflow-y: hidden; /* Oculta la barra de desplazamiento */
+  transition: border-color 0.2s;
+  min-height: 40px; /* Altura mínima */
+  max-height: 150px; /* Altura máxima antes de hacer scroll */
+}
+
+.chat-input-form textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
+}
+
 
 select, input[type="checkbox"] {
   font-size: 1rem;
