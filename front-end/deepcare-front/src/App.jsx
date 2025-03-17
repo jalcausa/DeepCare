@@ -33,7 +33,7 @@ function App() {
     const formData = new FormData(e.target);
     const credentials = {
       username: formData.get("username"),
-      password: formData.get("password"),
+      password: formData.get("password")
     };
 
     try {
@@ -41,7 +41,7 @@ function App() {
       const res = await fetch(`http://localhost:5000${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify(credentials)
       });
 
       if (res.ok) {
@@ -57,9 +57,7 @@ function App() {
 
   const loadUserConversations = async (username) => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/users/${username}/conversations`
-      );
+      const res = await fetch(`http://localhost:5000/users/${username}/conversations`);
       if (res.ok) {
         const data = await res.json();
         setConversations(data);
@@ -74,9 +72,7 @@ function App() {
 
   const loadConversation = async (conversationId) => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/conversations/${conversationId}/messages`
-      );
+      const res = await fetch(`http://localhost:5000/conversations/${conversationId}/messages`);
       if (res.ok) {
         const data = await res.json();
         setMessages(data);
@@ -92,9 +88,9 @@ function App() {
       const res = await fetch("http://localhost:5000/start_conversation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: user.id }),
+        body: JSON.stringify({ user_id: user.id })
       });
-
+      
       if (res.ok) {
         const data = await res.json();
         setActiveConversation(data.conversation_id);
@@ -116,9 +112,9 @@ function App() {
         const res = await fetch("http://localhost:5000/start_conversation", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ user_id: user.id }),
+          body: JSON.stringify({ user_id: user.id })
         });
-
+        
         if (res.ok) {
           const data = await res.json();
           currentConv = data.conversation_id;
@@ -139,8 +135,8 @@ function App() {
         body: JSON.stringify({
           conversation_id: currentConv,
           sender: "user",
-          content: input,
-        }),
+          content: input
+        })
       });
     } catch (error) {
       console.error("Error saving message:", error);
@@ -155,27 +151,24 @@ function App() {
       const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ peticion: input }),
+        body: JSON.stringify({ peticion: input })
       });
 
       if (res.ok) {
         const data = await res.json();
         const botMessage = {
           role: "bot",
-          content:
-            data.tipo === "grafico" ? (
-              <img
-                src={`data:image/png;base64,${data.grafico}`}
-                alt="Gráfico generado"
-                className="chart-image"
-              />
-            ) : (
-              data.texto
-            ),
+          content: data.tipo === "grafico" ? (
+            <img 
+              src={`data:image/png;base64,${data.grafico}`} 
+              alt="Gráfico generado"
+              className="chart-image"
+            />
+          ) : data.texto
         };
-
-        setMessages((prev) => [...prev, botMessage]);
-
+        
+        setMessages(prev => [...prev, botMessage]);
+        
         // Guardar respuesta del bot
         await fetch("http://localhost:5000/send_message", {
           method: "POST",
@@ -183,15 +176,15 @@ function App() {
           body: JSON.stringify({
             conversation_id: currentConv,
             sender: "bot",
-            content: data.tipo === "grafico" ? "Gráfico generado" : data.texto,
-          }),
+            content: data.tipo === "grafico" ? "Gráfico generado" : data.texto
+          })
         });
       }
     } catch (error) {
       console.error("Error:", error);
-      setMessages((prev) => [
+      setMessages(prev => [
         ...prev,
-        { role: "bot", content: "Ocurrió un error al procesar tu mensaje." },
+        { role: "bot", content: "Ocurrió un error al procesar tu mensaje." }
       ]);
     } finally {
       setIsLoading(false);
@@ -221,14 +214,12 @@ function App() {
                 {authMode === "login" ? "Entrar" : "Registrarse"}
               </button>
             </form>
-            <button
+            <button 
               className="switch-mode"
-              onClick={() =>
-                setAuthMode(authMode === "login" ? "register" : "login")
-              }
+              onClick={() => setAuthMode(authMode === "login" ? "register" : "login")}
             >
-              {authMode === "login"
-                ? "¿No tienes cuenta? Regístrate"
+              {authMode === "login" 
+                ? "¿No tienes cuenta? Regístrate" 
                 : "¿Ya tienes cuenta? Inicia sesión"}
             </button>
           </div>
@@ -238,10 +229,13 @@ function App() {
           <div className="sidebar">
             <div className="user-info">
               <span className="username">{user?.username}</span>
-              <button className="new-chat-btn" onClick={handleNewConversation}>
+              <button 
+                className="new-chat-btn"
+                onClick={handleNewConversation}
+              >
                 + Nueva conversación
               </button>
-              <button
+              <button 
                 className="logout-btn"
                 onClick={() => setShowAuthForm(true)}
               >
@@ -252,12 +246,12 @@ function App() {
               {conversations.map((conv) => (
                 <div
                   key={conv.id}
-                  className={`conversation-item ${
-                    activeConversation === conv.id ? "active" : ""
-                  }`}
+                  className={`conversation-item ${activeConversation === conv.id ? 'active' : ''}`}
                   onClick={() => loadConversation(conv.id)}
                 >
-                  <div className="conversation-preview">{conv.preview}</div>
+                  <div className="conversation-preview">
+                    {conv.preview}
+                  </div>
                   <div className="conversation-date">
                     {new Date(conv.created_at).toLocaleDateString()}
                   </div>
@@ -265,7 +259,7 @@ function App() {
               ))}
             </div>
           </div>
-
+          
           <div className="chat-main">
             <div className="chat-messages">
               {messages.map((message, index) => (
@@ -273,21 +267,17 @@ function App() {
                   <div className="avatar">
                     {message.role === "user" ? (
                       <svg viewBox="0 0 24 24" width="24" height="24">
-                        <path
-                          fill="currentColor"
-                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
-                        />
+                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                       </svg>
                     ) : (
                       <svg viewBox="0 0 24 24" width="24" height="24">
-                        <path
-                          fill="currentColor"
-                          d="M20.9 10.5c-.2-.6-.8-1-1.4-1h-4.5v-5c0-.6-.4-1-1-1s-1 .4-1 1v5h-4.5c-.6 0-1.2.4-1.4 1s0 1.2.4 1.6l7.5 7.5c.2.2.4.3.6.3s.4-.1.6-.3l7.5-7.5c.5-.4.6-1 .4-1.6z"
-                        />
+                        <path fill="currentColor" d="M20.9 10.5c-.2-.6-.8-1-1.4-1h-4.5v-5c0-.6-.4-1-1-1s-1 .4-1 1v5h-4.5c-.6 0-1.2.4-1.4 1s0 1.2.4 1.6l7.5 7.5c.2.2.4.3.6.3s.4-.1.6-.3l7.5-7.5c.5-.4.6-1 .4-1.6z"/>
                       </svg>
                     )}
                   </div>
-                  <div className="message-content">{message.content}</div>
+                  <div className="message-content">
+                    {message.content}
+                  </div>
                 </div>
               ))}
               {isLoading && (
@@ -301,7 +291,7 @@ function App() {
               )}
               <div ref={messagesEndRef} />
             </div>
-
+            
             <form onSubmit={handleSubmit} className="chat-input">
               <textarea
                 ref={textAreaRef}
@@ -312,13 +302,8 @@ function App() {
                 disabled={isLoading}
               />
               <button type="submit" disabled={isLoading}>
-                <svg
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  width="24"
-                  height="24"
-                >
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                <svg stroke="currentColor" viewBox="0 0 24 24" width="24" height="24">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
                 </svg>
               </button>
             </form>

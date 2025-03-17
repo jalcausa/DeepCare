@@ -8,7 +8,8 @@ import io
 import base64
 from datetime import datetime
 from models import db, User, Conversation, Message, Chart
-from graph_generator import GraphicAgent  # Asumiendo que GraphicAgent está en graphic_agent.py
+from graph_generator import GraphicAgent
+from main import ProcesadorInput
 
 matplotlib.use('Agg')  # Para evitar errores con entornos gráficos en servidores sin GUI
 
@@ -20,6 +21,21 @@ CORS(app)
 
 with app.app_context():
     db.create_all()
+
+agentProcesor = ProcesadorInput()
+@app.route('/chat', methods=['POST'])
+def chat():
+    # # Extraer la petición del cuerpo de la solicitud JSON
+    # data = request.get_json()
+    # peticion = data.get('peticion', '')  # Si no hay "peticion", se asigna un valor por defecto vacío
+
+    # if not peticion:
+    #     return jsonify({"error": "No se recibió una petición válida"}), 400
+    data = request.get_json()
+    mensaje_usuario = data.get('peticion', '')
+    
+    # Aquí realizamos el procesamiento del mensaje del usuario
+    return agentProcesor.procesarInput(mensaje_usuario)
 
 # ... (rutas de registro y login existentes)
 
