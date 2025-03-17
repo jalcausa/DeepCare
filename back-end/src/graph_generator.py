@@ -34,20 +34,24 @@ class GraphicAgent:
     
     def generar_codigo(self, peticion, data=None):
         """Genera código Python para graficar según la petición del usuario, opcionalmente usando un archivo CSV."""
-        prompt = f"""Genera código Python para crear un gráfico y guardarlo como PNG.
-        INSTRUCCIONES CRÍTICAS:
-        1. NO uses plt.show()
-        2. Asegúrate de crear una figura con plt.figure()
-        3. Usa plt.savefig() para guardar en BytesIO
-        4. Incluye los imports necesarios
-        5. No incluyas explicaciones, solo el código. La primera línea debe empezar con import.
-        6. En caso de incluir datos, usa SOLO esos datos, no intentes acceder a archivos que no existen
-        Petición del usuario: {peticion}
-        """
+        prompt = f"""Generate Python code to create a chart and, if the user request says so, add the necessary
+        code lines to save it as PNG, using the command line:
+        fig.savefig("name.png", dpi=300), where "name" is the name that you choose for the file.
+
+        CRITICAL INSTRUCTIONS:  
+        1. DO NOT use plt.show()  
+        2. Make sure to create a figure with plt.figure()  
+        3. Use plt.savefig() to save it to BytesIO  
+        4. Include the necessary imports  
+        5. Do not include explanations, only code. The first line must start with import.  
+        6. If data is included, use ONLY that data; do not attempt to access non-existent files.  
+        User request: {peticion}  
+        """  
+
         
         if data:
             prompt += f"""
-            Los datos que debes usar son los siguientes: {data}.
+            The data available are: {data}.
             """
         respuesta = self.client.get_response(prompt)
         return respuesta
