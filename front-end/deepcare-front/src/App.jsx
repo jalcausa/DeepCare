@@ -10,24 +10,50 @@ function App() {
   const [authMode, setAuthMode] = useState("login");
   const [conversations, setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem("darkMode") === "true");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [fontSize, setFontSize] = useState(() => localStorage.getItem("fontSize") || "medium");
+  const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem("soundEnabled") === "true");
+
   const messagesEndRef = useRef(null);
   const textAreaRef = useRef(null);
 
+  const adjustTextareaHeight = () => {
+    if (inputRef.current) {
+      inputRef.current.style.height = "auto"; 
+      inputRef.current.style.height = inputRef.current.scrollHeight + "px";
+    }
+  };
+
   useEffect(() => {
+    // Cambiar el modo oscuro y el tamaño de la fuente en el body
+    document.body.classList.toggle("dark-mode", darkMode);
+    document.body.classList.remove("small-font", "medium-font", "large-font");
+    document.body.classList.add(`${fontSize}-font`);
+    
+    // Guardar en localStorage
+    localStorage.setItem("darkMode", darkMode);
+    localStorage.setItem("fontSize", fontSize);
+  
+    // Ajustar la altura del textArea para que se ajuste al contenido
     if (textAreaRef.current) {
       textAreaRef.current.style.height = "auto";
       textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
     }
-  }, [input]);
+  
+    // Desplazar automáticamente hacia abajo en el chat cuando cambian los mensajes
+    scrollToBottom();
+  }, [darkMode, fontSize, input, messages]);
+  
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
+  const toggleDarkMode = () => setDarkMode(!darkMode);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  
   const handleAuth = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -226,7 +252,64 @@ function App() {
         </div>
       ) : (
         <div className="chat-container">
-          <div className="sidebar">
+          {/* Botón para abrir la barra lateral */}
+          <button className="sidebar-toggle" onClick={toggleSidebar}>☰</button>
+  
+          {/* Barra lateral */}
+          <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+            <button className="close-sidebar" onClick={toggleSidebar}>✖</button>
+            <button onClick={toggleDarkMode}>🌙 {darkMode ? "Modo Claro" : "Modo Oscuro"}</button>
+            <button onClick={() => setIsSettingsOpen(true)}>⚙ Ajustes</button>
+  
+            {/* Modal de configuración */}
+            {isSettingsOpen && (
+              <div className={`modal ${darkMode ? "dark-mode" : ""}`}>
+                <div className="modal-content">
+                  <span className="close-modal" onClick={() => setIsSettingsOpen(false)}>✖</span>
+                  <h2>Configuración</h2>
+  
+                  {/* Selector de tamaño de letra */}
+                  <label htmlFor="font-size">Tamaño de letra:</label>
+                  <select 
+                    id="font-size" 
+                    value={fontSize} 
+                    onChange={(e) => setFontSize(e.target.value)}
+                  >
+                    <option value="small">Pequeño</option>
+                    <option value="medium">Mediano</option>
+                    <option value="large">Grande</option>
+                  </select>
+  
+                  {/* Activar/Desactivar sonido */}
+                  <label>
+                    <input 
+                      type="checkbox" 
+                      checked={soundEnabled} 
+                      onChange={() => setSoundEnabled(!soundEnabled)} 
+                    />
+                    Activar sonido de notificación
+                  </label>
+  
+                  {/* Botón para guardar ajustes */}
+                  <button 
+                    onClick={() => {
+                      localStorage.setItem("fontSize", fontSize);
+                      localStorage.setItem("soundEnabled", soundEnabled);
+                      setIsSettingsOpen(false);
+                    }}
+                  >
+                    Guardar
+                  </button>
+                </div>
+              </div>
+            )}
+            <button>🎨 Personalizar</button>
+          </div>
+  
+          {/* Título de la conversación */}
+          <h1 className="chat-title">⚕️ DeepCare</h1>
+  
+          <div className="chat-sidebar-info">
             <div className="user-info">
               <span className="username">{user?.username}</span>
               <button 
@@ -259,55 +342,51 @@ function App() {
               ))}
             </div>
           </div>
-          
-          <div className="chat-main">
-            <div className="chat-messages">
-              {messages.map((message, index) => (
-                <div key={index} className={`message ${message.role}`}>
-                  <div className="avatar">
-                    {message.role === "user" ? (
-                      <svg viewBox="0 0 24 24" width="24" height="24">
-                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                      </svg>
-                    ) : (
-                      <svg viewBox="0 0 24 24" width="24" height="24">
-                        <path fill="currentColor" d="M20.9 10.5c-.2-.6-.8-1-1.4-1h-4.5v-5c0-.6-.4-1-1-1s-1 .4-1 1v5h-4.5c-.6 0-1.2.4-1.4 1s0 1.2.4 1.6l7.5 7.5c.2.2.4.3.6.3s.4-.1.6-.3l7.5-7.5c.5-.4.6-1 .4-1.6z"/>
-                      </svg>
-                    )}
-                  </div>
-                  <div className="message-content">
-                    {message.content}
-                  </div>
+  
+          <div className="chat-messages">
+            {messages.map((message, index) => (
+              <div key={index} className={`message ${message.role}`}>
+                <div className="avatar">
+                  {message.role === "user" ? (
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                      <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                      <path fill="currentColor" d="M20.9 10.5c-.2-.6-.8-1-1.4-1h-4.5v-5c0-.6-.4-1-1-1s-1 .4-1 1v5h-4.5c-.6 0-1.2.4-1.4 1s0 1.2.4 1.6l7.5 7.5c.2.2.4.3.6.3s.4-.1.6-.3l7.5-7.5c.5-.4.6-1 .4-1.6z"/>
+                    </svg>
+                  )}
                 </div>
-              ))}
-              {isLoading && (
-                <div className="message bot">
-                  <div className="loading-dots">
-                    <div className="dot"></div>
-                    <div className="dot"></div>
-                    <div className="dot"></div>
-                  </div>
+                <div className="message-content">
+                  {message.content}
                 </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
-            
-            <form onSubmit={handleSubmit} className="chat-input">
-              <textarea
-                ref={textAreaRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Escribe tu mensaje..."
-                rows="1"
-                disabled={isLoading}
-              />
-              <button type="submit" disabled={isLoading}>
-                <svg stroke="currentColor" viewBox="0 0 24 24" width="24" height="24">
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                </svg>
-              </button>
-            </form>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="message bot">
+                <div className="loading-dots">
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
           </div>
+  
+          <form onSubmit={handleSubmit} className="chat-input-form">
+            <textarea
+              ref={textAreaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Escribe tu mensaje..."
+              rows="1"
+              disabled={isLoading}
+            />
+            <button type="submit" disabled={isLoading}>
+              ➤
+            </button>
+          </form>
         </div>
       )}
     </div>
