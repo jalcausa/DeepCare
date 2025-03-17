@@ -1,0 +1,101 @@
+id,if,then
+1,MotivoIngreso:fiebre,Administrar medicamento antipirético y monitorear temperatura
+2,Edad:<5 & MotivoIngreso:fiebre,Evaluar posible infección viral y considerar exámenes adicionales
+3,Alergias:penicilina,Evitar antibióticos betalactámicos y considerar alternativas
+4,DiagnosticoPrincipal:neumonía,Iniciar terapia antibiótica y oxigenoterapia si es necesario
+5,CondicionesPrevias:diabetes,Monitorear niveles de glucosa y ajustar medicación según sea necesario
+6,Sexo:femenino & Edad:>50,Considerar evaluación de densidad ósea
+7,EstadoAlIngreso:crítico,Transferir a unidad de cuidados intensivos
+8,Servicio:pediatría & MotivoIngreso:deshidratación,Iniciar rehidratación oral o intravenosa según severidad
+9,FechaIngreso:invierno & MotivoIngreso:dificultad respiratoria,Evaluar posible infección por virus respiratorio sincitial
+10,Edad:>65 & MotivoIngreso:caída,Realizar evaluación de riesgo de caídas y considerar fisioterapia
+11,DiagnosticoPrincipal:infarto agudo de miocardio,Iniciar protocolo de atención cardíaca y considerar angioplastia
+12,Alergias:látex,Usar guantes y equipos sin látex durante toda la estancia hospitalaria
+13,CondicionesPrevias:asma & MotivoIngreso:tos,Evaluar exacerbación de asma y ajustar tratamiento broncodilatador
+14,Sexo:masculino & Edad:>45,Considerar evaluación de riesgo cardiovascular
+15,Servicio:obstetricia & MotivoIngreso:sangrado,Evaluar posible complicación del embarazo y monitorear feto
+16,EstadoAlIngreso:estable & DiagnosticoPrincipal:apendicitis,Programar cirugía de apendicectomía
+17,Edad:<18 & MotivoIngreso:dolor abdominal,Considerar apendicitis y realizar exámenes pertinentes
+18,CondicionesPrevias:hipertensión,Monitorear presión arterial y ajustar medicación antihipertensiva
+19,MotivoIngreso:dolor de cabeza & Edad:>50,Evaluar posible accidente cerebrovascular
+20,Alergias:contraste yodado,Evitar estudios con contraste yodado y considerar alternativas
+21,DiagnosticoPrincipal:fractura de cadera,Programar cirugía ortopédica y iniciar profilaxis de trombosis
+22,Servicio:oncología & MotivoIngreso:fiebre,Evaluar neutropenia febril y considerar antibióticos de amplio espectro
+23,FechaIngreso:verano & MotivoIngreso:insolación,Iniciar protocolo de enfriamiento y rehidratación
+24,Edad:>80 & EstadoAlIngreso:confusión,Evaluar delirium y descartar causas orgánicas
+25,CondicionesPrevias:enfermedad renal crónica,Ajustar dosis de medicamentos y monitorear función renal
+26,Sexo:femenino & MotivoIngreso:dolor pélvico,Considerar evaluación ginecológica
+27,DiagnosticoPrincipal:cetoacidosis diabética,Iniciar protocolo de manejo de cetoacidosis y monitorear electrolitos
+28,Alergias:aspirina,Evitar antiinflamatorios no esteroideos y considerar alternativas
+29,MotivoIngreso:convulsiones,Iniciar terapia anticonvulsiva y realizar estudios neurológicos
+30,Servicio:geriatría & MotivoIngreso:deterioro funcional,Realizar evaluación geriátrica integral
+31,EstadoAlIngreso:agitado,Evaluar causas de agitación y considerar sedación si es necesario
+32,Edad:<3 & MotivoIngreso:fiebre,Descartar infección del tracto urinario
+33,CondicionesPrevias:EPOC,Optimizar terapia broncodilatadora y considerar oxigenoterapia
+34,DiagnosticoPrincipal:pancreatitis aguda,Iniciar dieta absoluta y analgesia
+35,Sexo:masculino & MotivoIngreso:dolor testicular,Evaluar posible torsión testicular
+36,FechaIngreso:primavera & Alergias:polen,Considerar exacerbación de alergias estacionales
+37,Servicio:cirugía & MotivoIngreso:dolor abdominal,Evaluar posible apendicitis o colecistitis
+38,Edad:>70 & MotivoIngreso:síncope,Realizar evaluación cardiológica y neurológica
+39,CondicionesPrevias:artritis reumatoide,Ajustar terapia inmunosupresora y evaluar actividad de la enfermedad
+40,EstadoAlIngreso:deshidratado,Iniciar terapia de rehidratación y monitorear electrolitos
+41,DiagnosticoPrincipal:meningitis,Iniciar antibióticos de amplio espectro y aislamiento
+42,Alergias:sulfas,Evitar antibióticos que contengan sulfonamidas
+43,MotivoIngreso:sangrado gastrointestinal,Realizar endoscopia urgente y estabilizar hemodinámicamente
+44,Servicio:psiquiatría & MotivoIngreso:intento de suicidio,Iniciar protocolo de prevención de suicidio y evaluación psiquiátrica
+45,Edad:<12 & DiagnosticoPrincipal:leucemia,Iniciar protocolo de quimioterapia pediátrica
+46,CondicionesPrevias:fibrilación auricular,Evaluar anticoagulación y control de frecuencia cardíaca
+47,Sexo:femenino & MotivoIngreso:sangrado vaginal,Realizar evaluación ginecológica y descartar embarazo
+48,FechaIngreso:invierno & MotivoIngreso:gripe,Considerar terapia antiviral y medidas de aislamiento
+49,EstadoAlIngreso:comatoso,Asegurar vía aérea y realizar evaluación neurológica urgente
+50,DiagnosticoPrincipal:tromboembolismo pulmonar,Iniciar anticoagulación y considerar trombolisis
+51,Alergias:frutos secos,Asegurar dieta libre de frutos secos y educar sobre prevención
+52,MotivoIngreso:dolor lumbar,Evaluar posible cólico renal o hernia discal
+53,Servicio:nefrología & CondicionesPrevias:insuficiencia renal,Ajustar medicación y considerar diálisis si es necesario
+54,Edad:>60 & MotivoIngreso:pérdida de peso,Descartar neoplasia y evaluar estado nutricional
+55,CondicionesPrevias:VIH,Evaluar carga viral y ajustar terapia antirretroviral
+56,DiagnosticoPrincipal:cirrosis hepática,Monitorear función hepática y prevenir complicaciones
+57,Sexo:masculino & Edad:>50 & MotivoIngreso:dificultad para orinar,Evaluar posible hiperplasia prostática benigna
+58,FechaIngreso:verano & MotivoIngreso:picadura de insecto,Evaluar reacción alérgica y considerar tratamiento antihistamínico
+59,Servicio:traumatología & MotivoIngreso:fractura,Inmovilizar fractura y programar cirugía si es necesario
+60,Edad:<1 & MotivoIngreso:irritabilidad,Descartar otitis media y evaluar posible meningitis
+61,CondicionesPrevias:hipotiroidismo,Ajustar dosis de levotiroxina y monitorear función tiroidea
+62,EstadoAlIngreso:hipotenso,Iniciar reanimación con líquidos y evaluar causas de shock
+63,DiagnosticoPrincipal:endocarditis,Iniciar antibióticos de amplio espectro y realizar ecocardiograma
+64,Alergias:yodo,Evitar medios de contraste yodados en estudios de imagen
+65,MotivoIngreso:ictericia,Realizar pruebas de función hepática y considerar ecografía abdominal
+66,Servicio:neurología & MotivoIngreso:cefalea intensa,Descartar hemorragia subaracnoidea y realizar TAC cerebral
+67,Edad:>80 & CondicionesPrevias:demencia,Evaluar riesgo de delirium y minimizar medicaciones innecesarias
+68,CondicionesPrevias:enfermedad de Crohn,Evaluar actividad de la enfermedad y ajustar terapia inmunosupresora
+69,Sexo:femenino & Edad:<40 & MotivoIngreso:dolor abdominal,Descartar embarazo ectópico
+70,FechaIngreso:otoño & MotivoIngreso:disnea,Considerar exacerbación de EPOC o asma
+71,EstadoAlIngreso:febril & CondicionesPrevias:neutropenia,Iniciar antibióticos de amplio espectro y aislamiento protector
+72,DiagnosticoPrincipal:cólico renal,Iniciar analgesia y considerar litotricia
+73,Alergias:huevo,Evitar vacunas cultivadas en huevo y considerar alternativas
+74,MotivoIngreso:vértigo,Realizar maniobras de reposicionamiento y considerar estudios vestibulares
+75,Servicio:cardiología & MotivoIngreso:palpitaciones,Realizar electrocardiograma y monitoreo cardíaco
+76,Edad:<5 & MotivoIngreso:dificultad respiratoria,Evaluar posible bronquiolitis y considerar oxigenoterapia
+77,CondicionesPrevias:trasplante renal,Ajustar inmunosupresión y monitorear función del injerto
+78,DiagnosticoPrincipal:crisis hipertensiva,Iniciar terapia antihipertensiva intravenosa y monitoreo continuo
+79,Sexo:masculino & MotivoIngreso:dolor torácico,Realizar electrocardiograma y enzimas cardíacas
+80,FechaIngreso:primavera & MotivoIngreso:disnea,Considerar exacerbación de asma por alergias estacionales
+81,Servicio:endocrinología & DiagnosticoPrincipal:tirotoxicosis,Iniciar terapia con antitiroideos y beta-bloqueantes
+82,Edad:>70 & MotivoIngreso:confusión aguda,Evaluar delirium y descartar causas orgánicas
+83,CondicionesPrevias:enfermedad de Parkinson,Ajustar terapia dopaminérgica y evaluar complicaciones
+84,EstadoAlIngreso:ansioso,Considerar terapia ansiolítica y evaluación psicológica
+85,DiagnosticoPrincipal:celulitis,Iniciar antibióticos y elevar extremidad afectada
+86,Alergias:mariscos,Evitar alimentos y medicamentos derivados de mariscos
+87,MotivoIngreso:hemoptisis,Realizar radiografía de tórax y considerar broncoscopia
+88,Servicio:neumología & CondicionesPrevias:fibrosis quística,Optimizar terapia respiratoria y considerar antibióticos
+89,Edad:<18 & MotivoIngreso:dolor articular,Evaluar posible artritis juvenil
+90,CondicionesPrevias:lupus eritematoso sistémico,Evaluar actividad de la enfermedad y ajustar inmunosupresión
+91,Sexo:femenino & Edad:>45 & MotivoIngreso:sangrado vaginal,Descartar cáncer endometrial
+92,FechaIngreso:verano & MotivoIngreso:quemadura solar,Iniciar terapia tópica y evaluar grado de quemadura
+93,EstadoAlIngreso:oligúrico,Evaluar función renal y considerar fluidoterapia
+94,DiagnosticoPrincipal:hemorragia digestiva,Realizar endoscopia urgente y estabilizar hemodinámicamente
+95,Alergias:morfina,Considerar opioides alternativos para manejo del dolor
+96,MotivoIngreso:disnea & CondicionesPrevias:insuficiencia cardíaca,Optimizar terapia para insuficiencia cardíaca
+97,Servicio:gastroenterología & MotivoIngreso:diarrea crónica,Realizar estudios de malabsorción y considerar colonoscopia
+98,Edad:>60 & MotivoIngreso:caída,Evaluar riesgo de fractura y realizar densitometría ósea
+99,CondicionesPrevias:epilepsia,Ajustar terapia anticonvulsiva y evaluar niveles séricos
+100,DiagnosticoPrincipal:sepsis,Iniciar antibióticos de amplio espectro y reanimación hemodinámica
