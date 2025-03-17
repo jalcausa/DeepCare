@@ -1,6 +1,8 @@
 import re
 import pandas as pd
 from anthropic_api_calls import AnthropicClient
+from data_handler import directorio
+import os
 
 class SummaryAgent:
     def __init__(self):
@@ -23,7 +25,7 @@ class SummaryAgent:
         print(str(patient_data))
         if patient_data:
             prompt += f"\nPatient clinical data:\n{patient_data}"
-        df = pd.read_csv("/Users/jcalcausal/Documents/Carrera/DeepCare/back-end/data/recomendaciones.csv")
+        df = pd.read_csv(os.path.join(directorio, "recomendaciones.csv"))
         recommendations = df.to_string(index=False)
         prompt += f"\nSET OF RECOMMENDATIONS TO FOLLOW:\n{recommendations}"
         response = self.client.get_response(prompt)

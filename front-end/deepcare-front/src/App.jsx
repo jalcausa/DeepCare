@@ -5,70 +5,55 @@ function App() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("darkMode") === "true";
+  });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [fontSize, setFontSize] = useState(() => localStorage.getItem("fontSize") || "medium");
+  const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem("soundEnabled") === "true");
+
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+useEffect(() => {
+  document.body.classList.toggle("dark-mode", darkMode);
+  document.body.classList.remove("small-font", "medium-font", "large-font");
+  document.body.classList.add(`${fontSize}-font`);
+  localStorage.setItem("darkMode", darkMode);
+  localStorage.setItem("fontSize", fontSize);
+}, [darkMode, fontSize]);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+
+
+  const toggleDarkMode = () => setDarkMode(!darkMode);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // Agregar mensaje del usuario a la lista
-    const mensajeUsuario = input;
-    setMessages((prev) => [...prev, { role: "user", content: mensajeUsuario }]);
+    setMessages((prev) => [...prev, { role: "user", content: input }]);
     setInput("");
     setIsLoading(true);
 
     try {
-      // Llamada al backend
       const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ peticion: mensajeUsuario }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ peticion: input }),
       });
 
-      if (!res.ok) {
-        throw new Error("Error en la respuesta del servidor");
-      }
+      if (!res.ok) throw new Error("Error en el servidor");
 
       const data = await res.json();
-
-      // Verificar si la respuesta contiene un gráfico
-      if (data.tipo === "grafico") {
-        // Mostrar el gráfico como imagen en el chat
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "bot",
-            content: (
-              <img
-                src={`data:image/png;base64,${data.grafico}`}
-                alt="Gráfico generado"
-              />
-            ),
-          },
-        ]);
-      } else if (data.tipo === "texto") {
-        // Si es texto, mostrarlo normalmente
-        setMessages((prev) => [
-          ...prev,
-          { role: "bot", content: data.texto },
-        ]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
       setMessages((prev) => [
         ...prev,
-        { role: "bot", content: "Ocurrió un error al procesar tu mensaje." },
+        data.tipo === "grafico"
+          ? { role: "bot", content: <img src={`data:image/png;base64,${data.grafico}`} alt="Gráfico" /> }
+          : { role: "bot", content: data.texto },
       ]);
+    } catch {
+      setMessages((prev) => [...prev, { role: "bot", content: "Error al procesar tu mensaje." }]);
     } finally {
       setIsLoading(false);
     }
@@ -76,15 +61,65 @@ function App() {
 
   return (
     <div className="chat-container">
+      {/* Botón de la barra lateral */}
+      <button className="sidebar-toggle" onClick={toggleSidebar}>☰</button>
+
+      {/* Barra lateral */}
+      <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+        <button className="close-sidebar" onClick={toggleSidebar}>✖</button>
+        <button onClick={toggleDarkMode}>🌙 {darkMode ? "Modo Claro" : "Modo Oscuro"}</button>
+        <button onClick={() => setIsSettingsOpen(true)}>⚙ Ajustes</button>
+          {/* Modal de configuración */}
+            {isSettingsOpen && (
+              <div className={`modal ${darkMode ? "dark-mode" : ""}`}>
+                <div className="modal-content">
+                  <span className="close-modal" onClick={() => setIsSettingsOpen(false)}>✖</span>
+                  <h2>Configuración</h2>
+
+                  {/* Selector de tamaño de letra */}
+                  <label htmlFor="font-size">Tamaño de letra:</label>
+                  <select 
+                    id="font-size" 
+                    value={fontSize} 
+                    onChange={(e) => setFontSize(e.target.value)}
+                  >
+                    <option value="small">Pequeño</option>
+                    <option value="medium">Mediano</option>
+                    <option value="large">Grande</option>
+                  </select>
+
+                  {/* Activar/Desactivar sonido */}
+                  <label>
+                    <input 
+                      type="checkbox" 
+                      checked={soundEnabled} 
+                      onChange={() => setSoundEnabled(!soundEnabled)} 
+                    />
+                    Activar sonido de notificación
+                  </label>
+
+                  {/* Botón para guardar ajustes */}
+                  <button 
+                    onClick={() => {
+                      localStorage.setItem("fontSize", fontSize);
+                      localStorage.setItem("soundEnabled", soundEnabled);
+                      setIsSettingsOpen(false);
+                    }}
+                  >
+                    Guardar
+                  </button>
+                </div>
+              </div>
+            )}
+        <button>🎨 Personalizar</button>
+      </div>
+
       <h1 className="chat-title">DeepCare</h1>
+
       <div className="chat-messages">
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.role}`}>
-            <div className="message-content">
-              {typeof message.content === "string"
-                ? message.content
-                : message.content}
-            </div>
+            <div className="message-content">{message.content}</div>
           </div>
         ))}
         {isLoading && (
@@ -100,26 +135,10 @@ function App() {
         )}
         <div ref={messagesEndRef} />
       </div>
+
       <form onSubmit={handleSubmit} className="chat-input-form">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Escribe tu mensaje..."
-          disabled={isLoading}
-        />
-        <button type="submit" disabled={isLoading}>
-          <svg
-            stroke="currentColor"
-            fill="none"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            height="1.2em"
-            width="1.2em"
-          >
-            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
-          </svg>
-        </button>
+        <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Escribe tu mensaje..." disabled={isLoading} />
+        <button type="submit" disabled={isLoading}>➤</button>
       </form>
     </div>
   );
