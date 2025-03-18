@@ -6,7 +6,6 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(() => {
-    // Intentar cargar el usuario desde localStorage si existe
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
@@ -30,36 +29,33 @@ function App() {
   const textAreaRef = useRef(null);
 
   useEffect(() => {
-    // Cambiar el modo oscuro y el tamaño de la fuente en el body
     document.body.classList.toggle("dark-mode", darkMode);
+  }, [darkMode]);
+
+  useEffect(() => {
     document.body.classList.remove("small-font", "medium-font", "large-font");
     document.body.classList.add(`${fontSize}-font`);
-
-    // Guardar en localStorage
-    localStorage.setItem("darkMode", darkMode);
     localStorage.setItem("fontSize", fontSize);
+  }, [fontSize]);
 
-    // Ajustar la altura del textArea para que se ajuste al contenido
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
+
+  useEffect(() => {
+    localStorage.setItem("soundEnabled", soundEnabled);
+  }, [soundEnabled]);
+
+  useEffect(() => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = "auto";
       textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
     }
+  }, [input]);
 
-    // Desplazar automáticamente hacia abajo en el chat cuando cambian los mensajes
-    scrollToBottom();
-  }, [darkMode, fontSize, input, messages]);
-
-  const adjustTextareaHeight = () => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = "auto";
-      textAreaRef.current.style.height =
-        textAreaRef.current.scrollHeight + "px";
-    }
-  };
-
-  const scrollToBottom = () => {
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, [messages]);
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
@@ -79,12 +75,11 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
-
       if (res.ok) {
         const data = await res.json();
         const userData = { id: data.id, username: data.username };
-        setUser(userData); // <-- Guardamos el id y el username
-        localStorage.setItem("user", JSON.stringify(userData)); // <-- Guardamos en localStorage
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
         setShowAuthForm(false);
         loadUserConversations(data.username);
       }
@@ -129,13 +124,9 @@ function App() {
     try {
       const res = await fetch("http://localhost:5000/start_conversation", {
         method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: user.id }),
       });
-
       if (res.ok) {
         const data = await res.json();
         setActiveConversation(data.conversation_id);
@@ -150,7 +141,6 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
-
     let currentConv = activeConversation;
     if (!currentConv) {
       try {
@@ -159,7 +149,6 @@ function App() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ user_id: user.id }),
         });
-
         if (res.ok) {
           const data = await res.json();
           currentConv = data.conversation_id;
@@ -171,8 +160,6 @@ function App() {
         return;
       }
     }
-
-    // Guardar mensaje del usuario
     try {
       await fetch("http://localhost:5000/send_message", {
         method: "POST",
@@ -186,19 +173,16 @@ function App() {
     } catch (error) {
       console.error("Error saving message:", error);
     }
-
     const newMessages = [...messages, { role: "user", content: input }];
     setMessages(newMessages);
     setInput("");
     setIsLoading(true);
-
     try {
       const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ peticion: input }),
       });
-
       if (res.ok) {
         const data = await res.json();
         const botMessage = {
@@ -214,10 +198,7 @@ function App() {
               data.texto
             ),
         };
-
         setMessages((prev) => [...prev, botMessage]);
-
-        // Guardar respuesta del bot
         await fetch("http://localhost:5000/send_message", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -237,6 +218,15 @@ function App() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    setShowAuthForm(true);
+    setConversations([]);
+    setMessages([]);
+    setActiveConversation(null);
   };
 
   return (
@@ -276,13 +266,16 @@ function App() {
         </div>
       ) : (
         <div className="chat-container">
-          {/* Botón para abrir la barra lateral */}
+          <header className="chat-header">
+            <h1 className="chat-title">⚕️ DeepCare</h1>
+            <button className="logout-btn" onClick={handleLogout}>
+              Cerrar sesión
+            </button>
+          </header>
           <button className="sidebar-toggle" onClick={toggleSidebar}>
             ☰
           </button>
-
-          {/* Barra lateral */}
-          <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+          <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
             <button className="close-sidebar" onClick={toggleSidebar}>
               ✖
             </button>
@@ -290,46 +283,79 @@ function App() {
               🌙 {darkMode ? "Modo Claro" : "Modo Oscuro"}
             </button>
             <button onClick={() => setIsSettingsOpen(true)}>⚙ Ajustes</button>
-
-            <div className="conversations">
+            <div className="conversations-section">
               <button
                 className="new-conversation-btn"
                 onClick={handleNewConversation}
               >
-                Nueva Conversación
+                + Nueva conversación
               </button>
-              {conversations.length > 0 &&
-                conversations.map((conv) => (
-                  <div key={conv.id} className="conversation-item">
-                    <button onClick={() => loadConversation(conv.id)}>
-                      Conversación {conv.id}
-                    </button>
-                  </div>
-                ))}
+              {conversations.length > 0 && (
+                <div className="conversations-list">
+                  {conversations.map((conv) => (
+                    <div
+                      key={conv.id}
+                      className={`conversation-item ${
+                        activeConversation === conv.id ? "active" : ""
+                      }`}
+                      onClick={() => loadConversation(conv.id)}
+                    >
+                      <div className="conversation-preview">{conv.preview}</div>
+                      <div className="conversation-date">
+                        {new Date(conv.created_at).toLocaleDateString()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
-
-          {/* Chat */}
-          <div className="chat-box">
+          </aside>
+          <main className="chat-main">
             <div className="messages">
               {messages.map((message, index) => (
                 <div key={index} className={`message ${message.role}`}>
-                  {message.content}
+                  <div className="avatar">
+                    {message.role === "user" ? (
+                      <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path
+                          fill="currentColor"
+                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                        />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path
+                          fill="currentColor"
+                          d="M20.9 10.5c-.2-.6-.8-1-1.4-1h-4.5v-5c0-.6-.4-1-1-1s-1 .4-1 1v5h-4.5c-.6 0-1.2.4-1.4 1s0 1.2.4 1.6l7.5 7.5c.2.2.4.3.6.3s.4-.1.6-.3l7.5-7.5c.5-.4.6-1 .4-1.6z"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="message-content">{message.content}</div>
                 </div>
               ))}
               <div ref={messagesEndRef}></div>
             </div>
-            <div className="input-container">
+            <form onSubmit={handleSubmit} className="chat-input-form">
               <textarea
                 ref={textAreaRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onInput={adjustTextareaHeight}
-                placeholder="Escribe un mensaje..."
+                onInput={() => {
+                  if (textAreaRef.current) {
+                    textAreaRef.current.style.height = "auto";
+                    textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+                  }
+                }}
+                placeholder="Escribe tu mensaje..."
+                rows="1"
+                disabled={isLoading}
               />
-              <button onClick={handleSubmit}>Enviar</button>
-            </div>
-          </div>
+              <button type="submit" disabled={isLoading}>
+                ➤
+              </button>
+            </form>
+          </main>
         </div>
       )}
     </div>
