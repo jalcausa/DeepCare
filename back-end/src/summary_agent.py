@@ -1,6 +1,8 @@
 import re
+import os
 import pandas as pd
 from anthropic_api_calls import AnthropicClient
+from data_handler import directorio
 
 class SummaryAgent:
     def __init__(self):
@@ -15,7 +17,7 @@ class SummaryAgent:
         2. Use a professional and structured tone.
         3. If patient data is provided, integrate it appropriately into the report.
         4. Do not invent information; if data is insufficient, mention the limitation.
-		5. Make some recommendations based on the set of rules given above that best match the patien profile and that could be 
+        5. Make some recommendations based on the set of rules given above that best match the patien profile and that could be 
         extremely important to follow. If there are none that match the rules add some general recommendatios at the end of the
         report.
         User request: {request}
@@ -23,7 +25,8 @@ class SummaryAgent:
         print(str(patient_data))
         if patient_data:
             prompt += f"\nPatient clinical data:\n{patient_data}"
-        df = pd.read_csv("/Users/jcalcausal/Documents/Carrera/DeepCare/back-end/data/recomendaciones.csv")
+        recommendations_path = os.path.join(directorio, "recomendaciones.csv")
+        df = pd.read_csv(recommendations_path)
         recommendations = df.to_string(index=False)
         prompt += f"\nSET OF RECOMMENDATIONS TO FOLLOW:\n{recommendations}"
         response = self.client.get_response(prompt)
