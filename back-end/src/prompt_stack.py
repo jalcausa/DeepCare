@@ -71,7 +71,7 @@ Use the example as a way to understand and answer correctly.
             information about what you have consulted to obtain the context in your response: "{petition}". 
             To have more context about what this question refers to, here is 
             the list of previously asked questions: {" ::: ".join(consulta)}"""
-        #print("Prompt encadenado: " + encadenado)
+        print("Prompt encadenado: " + encadenado)
         return encadenado
     
     def construirPromptEncadenado2(self, petition):

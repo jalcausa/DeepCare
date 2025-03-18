@@ -26,10 +26,13 @@ class SelectorAgent:
             You only plan and delegate tasks — you do not execute them yourself.
 
             ###EXTREMELY IMPORTANT###
-            Your response must be exclusively of this type 'agent,number' , where the first position is the 
-            name of the agent to use, and the second position is the patient number you 
-            were asked about. If no specific patient was mentioned, or if more than one 
-            patient was asked about at once, return -1 as the second position.
+            Your response must be exclusively of this type 'agent,number,full name' , where the first position is the 
+            name of the agent to use The second position is the patient number you 
+            were asked about. If no specific patient number was mentioned, or if more than one 
+            patient was asked about at once, return -1 as the second position. The third position should be the 
+            mentioned name, in case that a name was mentioned, (for example, if the petition was 'Qué le pasa a
+            Juan García?', the third position of your answer should be 'Juan García'). If no name was mentioned, 
+            the third position must be 'no'.
 
             
             The prompt : ''' + petition)

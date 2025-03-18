@@ -7,7 +7,7 @@ from selector_agent import SelectorAgent
 from file_agent import FileAgent
 from summary_agent import SummaryAgent
 from pathlib import Path
-from lector_csv import obtenerDatosPaciente
+from lector_csv import obtenerDatosPaciente, obtenerPacienteID
 
 # Obtener columnas de los CSV
 prueba_columnas = atributos_archivos(directorio)
@@ -34,6 +34,7 @@ class ProcesadorInput:
         selectAgentAnswer = self.selector.seleccionarAgente(prompt_encadenado)
         agent = selectAgentAnswer[0]
         patient = selectAgentAnswer[1]
+        patientName = selectAgentAnswer[2]
         files = self.fileAgent.getFiles(prompt_encadenado)
         print("Agente seleccionado: " + agent.strip())
         if (files != "NO" and agent != "SummaryAgent"):
@@ -48,8 +49,13 @@ class ProcesadorInput:
             respuesta = self.client.get_response(prompt_encadenado, data)
             respuesta_json = jsonify({"tipo": "texto", "texto": respuesta})
         elif (agent.strip() == "SummaryAgent"):
+            print("Patient name: " + patientName)
+            patient = obtenerPacienteID(patientName)
+            print("Patient ID: " + patient)
+            if (patient==-1 and patientName!= "no"):
+                patient = obtenerPacienteID(patientName)
+                print("Patient ID: " + patient)
             data = obtenerDatosPaciente(patient)
             respuesta = self.summaryAgent.generate_report(prompt_encadenado, data)
             respuesta_json = jsonify({"tipo": "texto", "texto": respuesta})
-                
         return(respuesta_json)

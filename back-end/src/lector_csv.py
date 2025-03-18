@@ -4,6 +4,8 @@ import os
 from datetime import datetime
 import re
 from data_handler import ruta_archivos, directorio
+import unicodedata
+
 
 def read_csv(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -59,8 +61,31 @@ for file_key, file_path in file_paths.items():
 
         result[file_key]['data'][row_num] = validated_row
 
-# Filter data for patient 1
+# Filter data for patient number
 def obtenerDatosPaciente(patientID):
     patient_data = {file_key: {'headers': file_data['headers'], 'data': {row_num: row for row_num, row in file_data['data'].items() if row[0] == patientID}} for file_key, file_data in result.items()}
 
     return patient_data
+
+# Filter data for patient name
+def obtenerPacienteID(patientName):
+    # Definir la ruta al archivo resumen_pacientes.csv
+    ruta = os.path.join(directorio, "resumen_pacientes.csv")
+
+    # Leer el archivo resumen_pacientes.csv
+    with open(ruta, 'r', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        next(reader)  # Si hay una fila de cabecera, la saltamos
+        nombre = quitar_tildes(patientName.lower())
+        # Buscar el PatientID que corresponde al nombre
+        for row in reader:
+            if quitar_tildes(row[1].lower()) == nombre:  # Comparar en minúsculas para evitar problemas de mayúsculas/minúsculas
+                return row[0]  # El PatientID está en la primera columna
+
+    return f"ANOMALY: Patient with name '{patientName}' not found"  # Si no se encuentra el paciente
+
+def quitar_tildes(texto):
+    # Normalizar el texto a la forma de decomposición de caracteres y luego filtrar solo los caracteres ASCII
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', texto) if unicodedata.category(c) != 'Mn'
+    )
