@@ -25,6 +25,13 @@ function App() {
     () => localStorage.getItem("soundEnabled") === "true"
   );
 
+  const adjustTextareaHeight = () => {
+    if (inputRef.current) {
+      inputRef.current.style.height = "auto"; 
+      inputRef.current.style.height = inputRef.current.scrollHeight + "px";
+    }
+  };
+
   const messagesEndRef = useRef(null);
   const textAreaRef = useRef(null);
 
@@ -57,7 +64,13 @@ function App() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const toggleDarkMode = () => setDarkMode(!darkMode);
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => {
+      const newMode = !prev;
+      localStorage.setItem("darkMode", newMode);
+      return newMode;
+    });
+  };
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const handleAuth = async (e) => {
@@ -313,27 +326,40 @@ function App() {
           <main className="chat-main">
             <div className="messages">
               {messages.map((message, index) => (
-                <div key={index} className={`message ${message.role}`}>
-                  <div className="avatar">
-                    {message.role === "user" ? (
+                <div
+                  key={index}
+                  className={`message-wrapper ${message.role === "user" ? "user" : "bot"}`}
+                >
+                  {message.role === "bot" && <div className="avatar bot-avatar">🤖</div>}
+
+                  <div className={`message ${message.role}`}>
+                    <div className="message-content">{message.content}</div>
+                  </div>
+
+                  {message.role === "user" && (
+                    <div className="avatar user-avatar">
                       <svg viewBox="0 0 24 24" width="24" height="24">
                         <path
                           fill="currentColor"
                           d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
                         />
                       </svg>
-                    ) : (
-                      <svg viewBox="0 0 24 24" width="24" height="24">
-                        <path
-                          fill="currentColor"
-                          d="M20.9 10.5c-.2-.6-.8-1-1.4-1h-4.5v-5c0-.6-.4-1-1-1s-1 .4-1 1v5h-4.5c-.6 0-1.2.4-1.4 1s0 1.2.4 1.6l7.5 7.5c.2.2.4.3.6.3s.4-.1.6-.3l7.5-7.5c.5-.4.6-1 .4-1.6z"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                  <div className="message-content">{message.content}</div>
+                    </div>
+                  )}
                 </div>
               ))}
+              {isLoading && (
+                <div className="message-wrapper bot">
+                  <div className="avatar bot-avatar">🤖</div>
+                  <div className="message bot">
+                    <div className="loading-dots">
+                      <span className="dot"></span>
+                      <span className="dot"></span>
+                      <span className="dot"></span>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef}></div>
             </div>
             <form onSubmit={handleSubmit} className="chat-input-form">
@@ -345,6 +371,12 @@ function App() {
                   if (textAreaRef.current) {
                     textAreaRef.current.style.height = "auto";
                     textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault(); // Evita el salto de línea
+                    handleSubmit(e); // Envía el mensaje
                   }
                 }}
                 placeholder="Escribe tu mensaje..."
