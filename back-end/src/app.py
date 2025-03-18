@@ -108,18 +108,13 @@ def register_user():
 # Ruta para iniciar sesión (solo para validar usuario y contraseña)
 @app.route('/login', methods=['POST'])
 def login_user():
-    data = request.get_json()
-    username = data.get('username', '')
-    password = data.get('password', '')
-
-    if not username or not password:
-        return jsonify({"error": "El nombre de usuario y la contraseña son obligatorios"}), 400
-
-    user = User.query.filter_by(username=username).first()
-    if not user or not user.check_password(password):
-        return jsonify({"error": "Usuario o contraseña incorrectos"}), 401
-
-    return jsonify({"message": "Inicio de sesión exitoso"}), 200
+    data = request.json
+    user = User.query.filter_by(username=data['username']).first()
+    
+    if user and user.check_password(data['password']):
+        return jsonify({"id": user.id, "username": user.username})  # <-- Devolver también el ID
+    
+    return jsonify({"error": "Credenciales incorrectas"}), 401
 
 # Ruta para crear una nueva conversación
 @app.route('/start_conversation', methods=['POST'])
