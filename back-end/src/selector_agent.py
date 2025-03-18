@@ -17,7 +17,10 @@ class SelectorAgent:
             Your team members are:
 
             GraphGenerator: Responsible for generating graphs based on project needs.
-            SummaryAgent: Responsible for creating medical reports with total accuracy and precision.
+            SummaryAgent: Responsible for creating medical reports with total accuracy and precision. This agent should
+                    be the one used for asking questions like: 'What's wrong with Juan García?, as Juan García could
+                    be the name of a patient. All questions like 'Qué le pasa a "nombre"?' should be managed by this
+                    agent.
             ChatAgent: Responsible for answering any other questions.
             
             You only plan and delegate tasks — you do not execute them yourself.

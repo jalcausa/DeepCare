@@ -28,6 +28,7 @@ class GraphicAgent:
         4. Include the necessary imports  
         5. Do not include explanations, only code. The first line must start with import.  
         6. If data is included, use ONLY that data; do not attempt to access non-existent files.
+        7. When dealing with dates, use DD-MM-YY if necessary. Make sure the dates are shown in a proper way.
         User request: {peticion}
         """  
 
