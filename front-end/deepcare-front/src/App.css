@@ -62,16 +62,22 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell;
   line-height: 1.6;
   font-size: var(--font-size);
+  overflow-x: hidden; /* Evita el scroll horizontal */
   background-color: var(--background) !important;
   color: var(--text-color);
   transition: background 0.3s, color 0.3s, font-size 0.3s;
-  height: 100vh;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* Contenedor principal de la app */
 .app-container {
   height: 100vh;
   display: flex;
+  width: 100vw;
+  flex-direction: column;
+  overflow: hidden;
   background-color: var(--main-bg);
 }
 
@@ -81,8 +87,11 @@ body {
   margin: 0 auto;
   padding: 1rem;
   height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 /* Estilo del título del chat */
@@ -97,22 +106,31 @@ body {
 /* Estilos para la autenticación */
 .auth-container {
   display: flex;
+  background: white;
   justify-content: center;
   align-items: center;
+  height: 85vh;
   width: 100%;
   background-color: var(--main-bg);
 }
 
 .auth-box {
-  background: var(--sidebar-bg);
+  background: #1b7e55;
   padding: 2rem;
   border-radius: 8px;
   width: 400px;
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  opacity: 0.7;
+}
+
+.dark-mode .auth-box input {
+  background: #0a5737e0; /* Fondo más oscuro para inputs */
+  color: rgb(255, 255, 255);
+  border: 1px solid #555; /* Bordes más visibles */
 }
 
 .auth-box h2 {
-  color: var(--text-color);
+  color: white;
   text-align: center;
   margin-bottom: 1.5rem;
 }
@@ -121,16 +139,17 @@ body {
   width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
-  background: #40414f;
+  background: white;
   border: 1px solid #555;
   border-radius: 4px;
-  color: var(--text-color);
+  color: black;
 }
 
 .auth-box button {
   width: 100%;
   padding: 0.75rem;
   background: var(--primary-color);
+   margin: 10px 0; /* Agrega margen vertical entre botones */
   color: white;
   border: none;
   border-radius: 4px;
@@ -152,10 +171,14 @@ button:hover {
   background-color: #2980b9;
 }
 
-.chat-main {
+.chat-main {  /*Caja blanca de mensajes*/
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh;flex-grow: 1; /* Para que el área del chat ocupe el máximo espacio */
+  overflow-y: auto; /* Habilita el scroll solo dentro de las conversaciones si es necesario */
+  overflow-x: hidden;
+  max-width: 100vw;
+
 }
 
 
@@ -296,6 +319,8 @@ button:hover {
 
 .messages {
   flex: 1;
+  width: 1020px;
+  max-width: 100%; /* No permitir que crezca más allá del ancho de la pantalla */
   overflow-y: auto;
   padding: 1rem;
   display: flex;
@@ -334,6 +359,14 @@ button:hover {
   border: 1px solid var(--border-color);
   border-top-left-radius: 0.2rem;
   border-bottom-right-radius: 0.8rem;
+}
+
+.chart-image {
+  max-width: 1000px; /* Limita el ancho máximo a 1000px */
+  width: 100%; /* Hace que la imagen ocupe todo el ancho disponible, pero sin exceder los 1000px */
+  height: auto; /* Mantiene la proporción de la imagen */
+  display: block; /* Elimina cualquier espacio en línea debajo de la imagen */
+  margin: 0 auto; /* Centra la imagen en su contenedor */
 }
 
 .message.user {
@@ -468,15 +501,25 @@ button#save-settings:hover {
 }
 
 .conversation-item.active {
-  background: #343541;
+  background: #4cc5a7;
+  opacity: 0.7;
   border-left: 3px solid var(--primary-color);
 }
 
+body.dark-mode .conversation-item.active {
+  background-color: #174634; /* Verde más oscuro */
+  color: white; /* Asegurar que el texto sea legible en modo oscuro */
+}
+
 .conversation-preview {
-  color: #ececf1;
+  color: black;
   font-size: 0.9rem;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+body.dark-mode .conversation-preview {
+  color: #ccc; /* Nombre de conversación en un color claro en modo oscuro */
 }
 
 .user-info {
@@ -488,13 +531,20 @@ button#save-settings:hover {
 }
 
 .logout-btn {
-  background: none;
-  border: 1px solid #555;
-  color: var(--text-color);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  margin-top: auto; /* Lo empuja hacia abajo */
+  background-color: #d9534f; /* Rojo para destacar */
+  color: white;
+  border: none;
+  padding: 10px 15px;
   cursor: pointer;
+  text-align: center;
   width: 100%;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.logout-btn:hover {
+  background-color: #c9302c; /* Rojo más oscuro al pasar el mouse */
 }
 
 .new-chat-btn {

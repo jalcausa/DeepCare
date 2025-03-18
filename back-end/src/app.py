@@ -33,9 +33,10 @@ def chat():
     #     return jsonify({"error": "No se recibió una petición válida"}), 400
     data = request.get_json()
     mensaje_usuario = data.get('peticion', '')
-    
+    user_id = data.get('user_id', '')
+    conversation_id = data.get('conversation_id', '')
     # Aquí realizamos el procesamiento del mensaje del usuario
-    return agentProcesor.procesarInput(mensaje_usuario)
+    return agentProcesor.procesarInput(mensaje_usuario, user_id, conversation_id)
 
 # ... (rutas de registro y login existentes)
 
@@ -156,27 +157,34 @@ def send_message():
 
     return jsonify({"message": "Mensaje enviado exitosamente"}), 201
 
+
+
 # Ruta para generar y guardar el gráfico en base64
 @app.route('/guardar_grafico', methods=['POST'])
 def guardar_grafico():
     data = request.get_json()
-    peticion = data.get('peticion', '')
+    img_base64 = data.get('image_base64')
     nombre = data.get('nombre', 'grafico_generado')
+    user_id = data.get('user_id')
+    conversation_id = data.get('conversation_id')
     
-    if not peticion:
-        return jsonify({"error": "No se recibió la petición para el gráfico"}), 400
+    # if not peticion:
+    #     return jsonify({"error": "No se recibió la petición para el gráfico"}), 400
     
+    if not user_id or not conversation_id:
+        return jsonify({"error": "Faltan user_id o conversation_id"}), 400
+
     # Instanciar el agente gráfico
-    agente = GraphicAgent()
-    # Generar código para el gráfico
-    codigo_generado = agente.generar_codigo(peticion)
-    img_base64 = agente.ejecutar_codigo(codigo_generado)
+    # agente = GraphicAgent()
+    # # Generar código para el gráfico
+    # codigo_generado = agente.generar_codigo(peticion)
+    # img_base64 = agente.ejecutar_codigo(codigo_generado, user_id, conversation_id)
     
-    if img_base64 is None:
-        return jsonify({"error": "Error al generar el gráfico"}), 500
+    # if img_base64 is None:
+    #     return jsonify({"error": "Error al generar el gráfico"}), 500
     
     # Crear un nuevo registro en la base de datos con la imagen en base64
-    nuevo_grafico = Chart(name=nombre, image_base64=img_base64)
+    nuevo_grafico = Chart(name=nombre, image_base64=img_base64, user_id=user_id, conversation_id=conversation_id)
     db.session.add(nuevo_grafico)
     db.session.commit()
     

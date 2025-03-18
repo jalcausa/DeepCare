@@ -27,7 +27,7 @@ class ProcesadorInput:
         self.fileAgent = FileAgent()
         self.summaryAgent = SummaryAgent()
         
-    def procesarInput(self, input):
+    def procesarInput(self, input, user_id, conversation_id):
         prompt = self.gestorStack.hacer_pregunta(input)
         prompt_encadenado = self.gestorStack.construirPromptEncadenado(prompt)
         # consultarAnterior = gestorStack.verPromptAnterior(prompt)
@@ -42,7 +42,7 @@ class ProcesadorInput:
             data = None
         if (agent.strip() == "GraphGenerator"):
             codigo = self.agenteGrafico.generar_codigo(prompt_encadenado, data)
-            respuesta= self.agenteGrafico.ejecutar_codigo(codigo)
+            respuesta= self.agenteGrafico.ejecutar_codigo(codigo, user_id, conversation_id)
             respuesta_json = jsonify({"tipo": "grafico", "grafico": respuesta})
         elif (agent.strip() == "ChatAgent"):
             respuesta = self.client.get_response(prompt_encadenado, data)

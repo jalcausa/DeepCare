@@ -14,7 +14,7 @@ function App() {
   const [conversations, setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
   const [darkMode, setDarkMode] = useState(
-    () => localStorage.getItem("darkMode") === "true"
+    () => (user ? localStorage.getItem("darkMode") === "true" : false)
   );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -194,7 +194,11 @@ function App() {
       const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ peticion: input }),
+        body: JSON.stringify({
+          peticion: input,
+          user_id: user.id,
+          conversation_id: activeConversation,
+       	}),
       });
       if (res.ok) {
         const data = await res.json();
@@ -281,9 +285,6 @@ function App() {
         <div className="chat-container">
           <header className="chat-header">
             <h1 className="chat-title">⚕️ DeepCare</h1>
-            <button className="logout-btn" onClick={handleLogout}>
-              Cerrar sesión
-            </button>
           </header>
           <button className="sidebar-toggle" onClick={toggleSidebar}>
             ☰
@@ -296,6 +297,49 @@ function App() {
               🌙 {darkMode ? "Modo Claro" : "Modo Oscuro"}
             </button>
             <button onClick={() => setIsSettingsOpen(true)}>⚙ Ajustes</button>
+              {/* Modal de configuración */}
+                {isSettingsOpen && (
+                  <div className={`modal ${darkMode ? "dark-mode" : ""}`}>
+                    <div className="modal-content">
+                      <span className="close-modal" onClick={() => setIsSettingsOpen(false)}>✖</span>
+                      <h2>Configuración</h2>
+
+                      {/* Selector de tamaño de letra */}
+                      <label htmlFor="font-size">Tamaño de letra:</label>
+                      <select 
+                        id="font-size" 
+                        value={fontSize} 
+                        onChange={(e) => setFontSize(e.target.value)}
+                      >
+                        <option value="small">Pequeño</option>
+                        <option value="medium">Mediano</option>
+                        <option value="large">Grande</option>
+                      </select>
+
+                      {/* Activar/Desactivar sonido */}
+                      <label>
+                        <input 
+                          type="checkbox" 
+                          checked={soundEnabled} 
+                          onChange={() => setSoundEnabled(!soundEnabled)} 
+                        />
+                        Activar sonido de notificación
+                      </label>
+
+                      {/* Botón para guardar ajustes */}
+                      <button 
+                        onClick={() => {
+                          localStorage.setItem("fontSize", fontSize);
+                          localStorage.setItem("soundEnabled", soundEnabled);
+                          setIsSettingsOpen(false);
+                        }}
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                  </div>
+                )}
+            <button>🎨 Personalizar</button>
             <div className="conversations-section">
               <button
                 className="new-conversation-btn"
@@ -322,18 +366,28 @@ function App() {
                 </div>
               )}
             </div>
+            <button className="logout-btn" onClick={handleLogout}>
+              Cerrar sesión
+            </button>
           </aside>
           <main className="chat-main">
             <div className="messages">
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`message-wrapper ${message.role === "user" ? "user" : "bot"}`}
+                  className={`message-wrapper ${
+                    message.role === "user" ? "user" : "bot"
+                  }`}
                 >
-                  {message.role === "bot" && <div className="avatar bot-avatar">🤖</div>}
+                  {message.role === "bot" && (
+                    <div className="avatar bot-avatar">🤖</div>
+                  )}
 
                   <div className={`message ${message.role}`}>
-                    <div className="message-content">{message.content}</div>
+                    <div
+                      className="message-content"
+                      dangerouslySetInnerHTML={{ __html: message.content }}
+                    ></div>
                   </div>
 
                   {message.role === "user" && (
