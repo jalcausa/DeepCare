@@ -297,48 +297,53 @@ function App() {
               🌙 {darkMode ? "Modo Claro" : "Modo Oscuro"}
             </button>
             <button onClick={() => setIsSettingsOpen(true)}>⚙ Ajustes</button>
-              {/* Modal de configuración */}
-                {isSettingsOpen && (
-                  <div className={`modal ${darkMode ? "dark-mode" : ""}`}>
-                    <div className="modal-content">
-                      <span className="close-modal" onClick={() => setIsSettingsOpen(false)}>✖</span>
-                      <h2>Configuración</h2>
+            {/* Modal de configuración */}
+            {isSettingsOpen && (
+              <div className={`modal ${darkMode ? "dark-mode" : ""}`}>
+                <div className="modal-content">
+                  <span
+                    className="close-modal"
+                    onClick={() => setIsSettingsOpen(false)}
+                  >
+                    ✖
+                  </span>
+                  <h2>Configuración</h2>
 
-                      {/* Selector de tamaño de letra */}
-                      <label htmlFor="font-size">Tamaño de letra:</label>
-                      <select 
-                        id="font-size" 
-                        value={fontSize} 
-                        onChange={(e) => setFontSize(e.target.value)}
-                      >
-                        <option value="small">Pequeño</option>
-                        <option value="medium">Mediano</option>
-                        <option value="large">Grande</option>
-                      </select>
+                  {/* Selector de tamaño de letra */}
+                  <label htmlFor="font-size">Tamaño de letra:</label>
+                  <select
+                    id="font-size"
+                    value={fontSize}
+                    onChange={(e) => setFontSize(e.target.value)}
+                  >
+                    <option value="small">Pequeño</option>
+                    <option value="medium">Mediano</option>
+                    <option value="large">Grande</option>
+                  </select>
 
-                      {/* Activar/Desactivar sonido */}
-                      <label>
-                        <input 
-                          type="checkbox" 
-                          checked={soundEnabled} 
-                          onChange={() => setSoundEnabled(!soundEnabled)} 
-                        />
-                        Activar sonido de notificación
-                      </label>
+                  {/* Activar/Desactivar sonido */}
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={soundEnabled}
+                      onChange={() => setSoundEnabled(!soundEnabled)}
+                    />
+                    {"  "}Activar sonido de notificación
+                  </label>
 
-                      {/* Botón para guardar ajustes */}
-                      <button 
-                        onClick={() => {
-                          localStorage.setItem("fontSize", fontSize);
-                          localStorage.setItem("soundEnabled", soundEnabled);
-                          setIsSettingsOpen(false);
-                        }}
-                      >
-                        Guardar
-                      </button>
-                    </div>
-                  </div>
-                )}
+                  {/* Botón para guardar ajustes */}
+                  <button
+                    onClick={() => {
+                      localStorage.setItem("fontSize", fontSize);
+                      localStorage.setItem("soundEnabled", soundEnabled);
+                      setIsSettingsOpen(false);
+                    }}
+                  >
+                    Guardar
+                  </button>
+                </div>
+              </div>
+            )}
             <button>🎨 Personalizar</button>
             <div className="conversations-section">
               <button
@@ -386,8 +391,14 @@ function App() {
                   <div className={`message ${message.role}`}>
                     <div
                       className="message-content"
-                      dangerouslySetInnerHTML={{ __html: message.content }}
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          typeof message.content === "string"
+                            ? message.content
+                            : "",
+                      }}
                     ></div>
+                    {typeof message.content !== "string" && message.content}
                   </div>
 
                   {message.role === "user" && (

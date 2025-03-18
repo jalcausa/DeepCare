@@ -27,8 +27,8 @@ class GraphicAgent:
         3. Use plt.savefig() to save it to BytesIO  
         4. Include the necessary imports  
         5. Do not include explanations, only code. The first line must start with import.  
-        6. If data is included, use ONLY that data; do not attempt to access non-existent files.  
-        User request: {peticion}  
+        6. If data is included, use ONLY that data; do not attempt to access non-existent files.
+        User request: {peticion}
         """  
 
         if data:

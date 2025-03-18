@@ -59,19 +59,19 @@ Use the example as a way to understand and answer correctly.
 """
 
         consulta = PromptStack.client.get_response(prompt)
-        print("\n Stack de preguntas: " + " ::: ".join(self.historial_preguntas))
-        print("\n Número de preguntas a consultar: " + consulta.strip() + "\n")
+        #print("\n Stack de preguntas: " + " ::: ".join(self.historial_preguntas))
+        #print("\n Número de preguntas a consultar: " + consulta.strip() + "\n")
         return int(consulta.strip())
 
     def construirPromptEncadenado(self, petition):
         number = self.verPromptAnterior(petition)
         consulta = self.historial_preguntas[len(self.historial_preguntas) - number - 1:]
-        print("\n La consulta de preguntas es: " + "::".join(consulta))
+        #print("\n La consulta de preguntas es: " + "::".join(consulta))
         encadenado = f"""You must respond only to the following question. Do not include any 
             information about what you have consulted to obtain the context in your response: "{petition}". 
             To have more context about what this question refers to, here is 
             the list of previously asked questions: {" ::: ".join(consulta)}"""
-        print("Prompt encadenado: " + encadenado)
+        #print("Prompt encadenado: " + encadenado)
         return encadenado
     
     def construirPromptEncadenado2(self, petition):
