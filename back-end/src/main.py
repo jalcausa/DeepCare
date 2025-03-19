@@ -50,7 +50,7 @@ class ProcesadorInput:
             respuesta_json = jsonify({"tipo": "texto", "texto": respuesta})
         elif (agent.strip() == "SummaryAgent"):
             print("Patient name: " + patientName)
-            patient = obtenerPacienteID(patientName)
+            #patient = obtenerPacienteID(patientName)
             print("Patient ID: " + patient)
             if (patient==-1 and patientName!= "no"):
                 patient = obtenerPacienteID(patientName)
