@@ -10,7 +10,7 @@ class SummaryAgent:
     
     def generate_report(self, request, patient_data=None):
         """Generates a precise medical report based on the user's request and optional patient data."""
-        prompt = f"""Imagine that you are a very competent doctor that needs to generate a detailed medical report ç
+        prompt = f"""Imagine that you are a very competent doctor that needs to generate a detailed medical report
         for a patient that is being discharged based on the following user request:
         CRITICAL INSTRUCTIONS:
         1. The response must be precise, clear, and based on clinical data.
