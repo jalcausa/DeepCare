@@ -37,6 +37,7 @@ class SummaryAgent:
         recommendations = df.to_string(index=False)
         prompt += f"\nSET OF RECOMMENDATIONS TO FOLLOW:\n{recommendations}"
         response = self.client.get_response(prompt)
+        print("SummaryAgent, línea 40")
         return response.strip()
     
 '''

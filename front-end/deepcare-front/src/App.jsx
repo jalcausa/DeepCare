@@ -369,7 +369,13 @@ function App() {
                       }`}
                       onClick={() => loadConversation(conv.id)}
                     >
-                      <div className="conversation-preview">{conv.preview}</div>
+                      <div
+                        className="conversation-preview"
+                        dangerouslySetInnerHTML={{
+                          __html: typeof conv.preview === "string" ? convertirNegrita(conv.preview) : "",
+                        }}
+                      ></div>
+
                       <div className="conversation-date">
                         {new Date(conv.created_at).toLocaleDateString()}
                       </div>
