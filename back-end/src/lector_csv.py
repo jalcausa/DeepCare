@@ -71,7 +71,7 @@ def obtenerDatosPaciente(patientID):
 def obtenerPacienteID(patientName):
     # Definir la ruta al archivo resumen_pacientes.csv
     ruta = os.path.join(directorio, "resumen_pacientes.csv")
-
+    print(ruta)
     # Leer el archivo resumen_pacientes.csv
     with open(ruta, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)

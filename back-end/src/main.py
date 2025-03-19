@@ -52,7 +52,7 @@ class ProcesadorInput:
             print("Patient name: " + patientName)
             #patient = obtenerPacienteID(patientName)
             print("Patient ID: " + patient)
-            if (patient==-1 and patientName!= "no"):
+            if (patient=="-1" and patientName!= "no"):
                 patient = obtenerPacienteID(patientName)
                 print("Patient ID: " + patient)
             data = obtenerDatosPaciente(patient)
