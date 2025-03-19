@@ -20,9 +20,12 @@ class SummaryAgent:
         5. Make some recommendations based on the set of rules given above that best match the patien profile and that could be 
         extremely important to follow. If there are none that match the rules add some general recommendatios at the end of the
         report.
-        6. <strong>Highlight important medical terms in bold</strong> by surrounding them with <strong> and </strong> (<strong>example</strong>).
-        7. USE HTML FORMAT FOR YOUR ANSWER. Use indentations to make it look better and don't add
-        innecessary blank lines.
+        6. **HIGHLIGHT TITLES** and **Highlight important medical terms in bold** by surrounding them with double asterisks (**example**).
+        7. NEVER finish the summary with lines like:    
+                    Dr. [Nombre del Médico]
+                    Colegiado Nº [Número de Colegiado]
+                    Servicio de Cirugía General
+
         
         User request: {request}
         """
@@ -65,4 +68,19 @@ print(generated_report)
 
 '''
 I would like you to give me a set of rules that could be used by a LLM to make recomendations base in the values of these fields: Edad,Sexo,Alergias,MotivoIngreso,DiagnosticoPrincipal,CondicionesPrevias,FechaIngreso,Servicio,EstadoAlIngreso. For example if MotivoIngreso is fiebre recommend taking some medicine to fix that. Generate at least 100 rules you can think for these fields in a csv format where the fields are "if" and "then". The id field must contain which of the fields or fields given was taken into consideration and there value to make the recomendation and "then" must contain the recomendations made in base of the "if" values.
+'''
+
+
+'''
+
+        6. <strong>Highlight important medical terms in bold</strong> by surrounding them with <strong> and </strong> (<strong>example</strong>).
+        7. USE HTML FORMAT FOR YOUR ANSWER. Use indentations to make it look better, and don't add
+        innecessary blank lines. For example:
+            Motivo de Ingreso:
+            (blank line)
+            (indentation)    Disnea en aumento, tos productiva con esputo purulento
+            (blank line)
+            Diagnóstico Principal:
+            (blank line)
+            (indentation)   Exacerbación de EPOC (Código CIE-10: 195951007)
 '''

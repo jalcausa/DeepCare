@@ -36,6 +36,11 @@ function App() {
   const messagesEndRef = useRef(null);
   const textAreaRef = useRef(null);
 
+  const convertirNegrita = (texto) => {
+    return texto.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  };
+  
+
 
   useEffect(() => {
     document.body.classList.toggle("dark-mode", darkMode);
@@ -396,7 +401,7 @@ function App() {
                       dangerouslySetInnerHTML={{
                         __html:
                           typeof message.content === "string"
-                            ? message.content
+                            ? convertirNegrita(message.content)
                             : "",
                       }}
                     ></div>

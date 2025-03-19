@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 import re
 from data_handler import ruta_archivos, directorio
+from datetime import datetime
 import unicodedata
 
 
@@ -15,11 +16,18 @@ def read_csv(file_path):
     return headers, data
 
 def validate_date(date_str):
-    try:
-        datetime.strptime(date_str, '%Y-%m-%d')
-        return date_str
-    except ValueError:
-        return f"ANOMALY: Invalid date format - {date_str}"
+    formats = ['%Y-%m-%d', '%d/%m/%Y', '%m/%d/%Y', '%d-%m-%Y', '%Y/%m/%d']
+    for fmt in formats:
+        try:
+            # Intentar convertir la fecha con cada formato
+            datetime.strptime(date_str, fmt)
+            return date_str
+        except ValueError:
+            # Si no coincide con el formato, continúa con el siguiente
+            continue
+    # Si no coincide con ninguno de los formatos, retornar mensaje de error
+    return f"ANOMALY: Invalid date format - {date_str}"
+
 
 def validate_numeric(value):
     try:
@@ -32,7 +40,7 @@ def validate_row(row, expected_columns):
     if len(row) > expected_columns:
         return f"ANOMALY: Extra columns detected - {row[expected_columns:]}"
     elif len(row) < expected_columns:
-        return f"ANOMALY: Missing columns - Expected {expected_columns}, got {len(row)}"
+        row.extend([None] * (expected_columns - len(row)))
     return None
 
 
