@@ -208,6 +208,8 @@ button:hover {
   gap: 1rem;
   transition: left 0.3s ease-in-out;
   z-index: 1000;
+  overflow-y: auto; /* Permite desplazamiento vertical */
+  overflow-x: hidden; /* Evita desplazamiento horizontal */
 }
 
 .sidebar.open {
