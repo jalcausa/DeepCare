@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import "./App.css";
+import React from 'react';
 
 function App() {
   const [input, setInput] = useState("");
@@ -34,6 +35,7 @@ function App() {
 
   const messagesEndRef = useRef(null);
   const textAreaRef = useRef(null);
+
 
   useEffect(() => {
     document.body.classList.toggle("dark-mode", darkMode);

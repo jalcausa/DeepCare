@@ -20,6 +20,10 @@ class SummaryAgent:
         5. Make some recommendations based on the set of rules given above that best match the patien profile and that could be 
         extremely important to follow. If there are none that match the rules add some general recommendatios at the end of the
         report.
+        6. <strong>Highlight important medical terms in bold</strong> by surrounding them with <strong> and </strong> (<strong>example</strong>).
+        7. USE HTML FORMAT FOR YOUR ANSWER. Use indentations to make it look better and don't add
+        innecessary blank lines.
+        
         User request: {request}
         """
         print(str(patient_data))
