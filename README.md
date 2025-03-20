@@ -10,9 +10,9 @@ técnicas de **prompt engineering**.
 
 ## 🔥 Tecnologías Utilizadas
 - **AWS Bedrock**: servicio de Amazon Web Services que permite a los desarrolladores construir
-- y escalar aplicaciones de inteligencia artificial generativa sin necesidad de gestionar la infraestructura subyacente.
-- Proporciona acceso a una variedad de modelos fundacionales (FMs) de distintos proveedores, permitiendo su integración en aplicaciones a través de una API.
-- Además, Bedrock permite personalizar modelos con datos específicos, garantizando seguridad, escalabilidad y cumplimiento en su uso dentro de entornos empresariales y de producción.
+y escalar aplicaciones de inteligencia artificial generativa sin necesidad de gestionar la infraestructura subyacente.
+Proporciona acceso a una variedad de modelos fundacionales (FMs) de distintos proveedores, permitiendo su integración en aplicaciones a través de una API.
+Además, Bedrock permite personalizar modelos con datos específicos, garantizando seguridad, escalabilidad y cumplimiento en su uso dentro de entornos empresariales y de producción.
 - **Backend**: Python con Flask
 - **Frontend**: React + Vite
 - **Base de datos**: SQLite para almacenar datos de usuarios e historial de conversaciones
