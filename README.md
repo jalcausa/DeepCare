@@ -17,7 +17,8 @@ Además, Bedrock permite personalizar modelos con datos específicos, garantizan
 - **Backend**: Python con Flask.
 - **Frontend**: React + Vite.
 - **Base de datos**: SQLite para almacenar datos de usuarios e historial de conversaciones.
-- **Prompt Engineering**.
+- **SQLAlchemy**: ORM (Object-Relational Mapping) para interactuar con la base de datos.
+- **Matplotlib**: biblioteca para generar visualizaciones y gráficos.
 
 ## 🚀 Funcionalidades Principales
 - **Generación de informes de alta** basados en los datos disponibles de los pacientes.
