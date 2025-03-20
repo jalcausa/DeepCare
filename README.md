@@ -13,20 +13,21 @@ técnicas de **prompt engineering**.
 y escalar aplicaciones de inteligencia artificial generativa sin necesidad de gestionar la infraestructura subyacente.
 Proporciona acceso a una variedad de modelos fundacionales (FMs) de distintos proveedores, permitiendo su integración en aplicaciones a través de una API.
 Además, Bedrock permite personalizar modelos con datos específicos, garantizando seguridad, escalabilidad y cumplimiento en su uso dentro de entornos empresariales y de producción.
-- **Backend**: Python con Flask
-- **Frontend**: React + Vite
-- **Base de datos**: SQLite para almacenar datos de usuarios e historial de conversaciones
-- **Prompt Engineering**
+- **Anthropic Claude Sonnet 3.5**: modelo seleccionado de entre los ofrecidos por AWS Bedrock.
+- **Backend**: Python con Flask.
+- **Frontend**: React + Vite.
+- **Base de datos**: SQLite para almacenar datos de usuarios e historial de conversaciones.
+- **Prompt Engineering**.
 
 ## 🚀 Funcionalidades Principales
-- **Análisis de datos clínicos** mediante modelos de IA
-- **Interfaz conversacional** para facilitar la interacción con la IA
-- **Generación de gráficos y reportes** basados en los datos procesados
-- **Optimización de consultas médicas** con asistencia inteligente
+- **Generación de informes de alta** basados en los datos disponibles de los pacientes.
+- **Análisis de datos clínicos** mediante modelos de IA.
+- **Interfaz conversacional** para facilitar la interacción con la IA.
+- **Generación de gráficos** basados en los datos procesados.
 
 ## 📈 Impacto Clínico
-Nuestra aplicación permite a profesionales de la salud agilizar el análisis de información médica y mejorar la toma de decisiones,
-reduciendo la carga administrativa y mejorando la calidad de la atención a los pacientes.
+Nuestra aplicación permite a profesionales de la salud agilizar el proceso de generación de informes evolutivos, así como el
+de análisis de información médica, reduciendo la carga administrativa y mejorando la calidad de la atención a los pacientes.
 
 
 ---
