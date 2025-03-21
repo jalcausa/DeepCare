@@ -6,7 +6,8 @@ Nuestra solución combina inteligencia artificial con técnicas avanzadas de pro
 
 ## 📌 Descripción del Proyecto
 DeepCare es una aplicación web diseñada para mejorar la eficiencia en la gestión y análisis de datos clínicos mediante el uso de modelos avanzados de inteligencia artificial y 
-técnicas de **prompt engineering**.
+técnicas de **prompt engineering**, lo que permite generar informes evolutivos de pacientes hospitalizados en el momento del alta médica,
+así como la generación de gráficos sobre marcadores de los pacientes.
 
 ## 🔥 Tecnologías Utilizadas
 - **AWS Bedrock**: servicio de Amazon Web Services que permite a los desarrolladores construir
