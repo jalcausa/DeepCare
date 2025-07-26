@@ -33,5 +33,5 @@ de análisis de información médica, reduciendo la carga administrativa y mejor
 
 
 ---
-✨ *DeepCare: Inteligencia Artifical al servicio de la salud.* ✨
+✨ *DeepCare: Inteligencia Artificial al servicio de la salud.* ✨
 
