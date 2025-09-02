@@ -1,6 +1,6 @@
 # DeepCare
 
-> 🌐 Languages: [English](#🏆-second-prize-–-dedalus-andalucía-datathon-2025) | [Español](#🏆-segundo-premio---datathon-dedalus-andalucía-2025)
+> 🌐 Languages: [English](#second-prize--dedalus-andalucia-datathon-2025) | [Español](#segundo-premio---datathon-dedalus-andalucia-2025)
 
 
 ## 🏆 Second Prize – Dedalus Andalucía Datathon 2025
